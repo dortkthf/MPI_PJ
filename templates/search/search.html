@@ -45,25 +45,6 @@ $(document).ready(function() {
                 data: {'team_code': selectedTeam},
                 dataType: 'json',
                 success: function(data) {
-                    for(member in data.members) {
-                        for (com in data.company){
-                            console.log(com)
-                            console.log(data.members[member][com].week_before_last_total)
-                            console.log(data.members[member][com].last_week_total)
-                            console.log(data.members[member][com].growth_rate)
-                        }
-                        console.log('-----------------------------------------')
-                        console.log(data.members[member].new)
-                        console.log(data.members[member].escalation)
-                        console.log(data.members[member].before_last_live)
-                        console.log(data.members[member].last_live)
-                        console.log(data.members[member].increase)
-                        console.log(data.members[member].previous_month_sales)
-                        console.log(data.members[member].current_month_sales)
-                        console.log(data.members[member].estimated_sales)
-                        console.log(data.members[member].estimated_growth)
-                        console.log('-----------------------------------------')
-                    }
                     updateTable(data)
                 },
                 error: function() {
@@ -80,29 +61,10 @@ $(document).ready(function() {
         var selectMember = $(this).val();
         if (selectMember) {
             $.ajax({
-                url: '{% url "fetch_team_data2" %}',  // Django URLconf에 해당 경로 추가 필요
+                url: '{% url "fetch_team_data" %}',  // Django URLconf에 해당 경로 추가 필요
                 data: {'member_code': selectMember},
                 dataType: 'json',
                 success: function(data) {
-                    for(member in data.members) {
-                        for (com in data.company){
-                            console.log(com)
-                            console.log(data.members[member][com].week_before_last_total)
-                            console.log(data.members[member][com].last_week_total)
-                            console.log(data.members[member][com].growth_rate)
-                        }
-                        console.log('-----------------------------------------')
-                        console.log(data.members[member].new)
-                        console.log(data.members[member].escalation)
-                        console.log(data.members[member].before_last_live)
-                        console.log(data.members[member].last_live)
-                        console.log(data.members[member].increase)
-                        console.log(data.members[member].previous_month_sales)
-                        console.log(data.members[member].current_month_sales)
-                        console.log(data.members[member].estimated_sales)
-                        console.log(data.members[member].estimated_growth)
-                        console.log('-----------------------------------------')
-                    }
                     updateTable(data)
                 },
                 error: function() {
