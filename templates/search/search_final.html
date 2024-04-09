@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    /* Inline style if you prefer */
+    .sticky-header th {
+        position: sticky;
+        top: 0;
+        background-color: #000;
+        color: #fff;
+    }
+
+    .scrollable-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+        width: 1700px;
+        height: 300px;
+    }
+
+    .vertical-align-middle {
+        vertical-align: middle;
+    }
+
+    .tb {
+        position: sticky;
+        top: 0;
+    }
+</style>
+
+
+<h1 class="text-center fw-bold my-5">주간 업무 미팅 자료</h1>
+
+<div class="text-center">
+    <form method="post" action="">
+        {% csrf_token %}
+        <!-- 각 이름에 대한 체크박스를 생성합니다. -->
+
+        {% for name in names %}
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="{{ name }}" name="names" value="{{ name }}"
+            {% if name in selectedName %} checked {% endif %}>
+            <label class="form-check-label" for="{{ name }}">{{ name }}</label>
+        </div>
+        {% endfor %}
+        <br>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary mt-4 me-1">Generate Report</button>
+            <button name="export_excel" class="btn btn-success fw-bold mt-4 ms-1">엑셀파일 다운로드</button>
+        </div>
+    </form>
+</div>
+
+<br>
+<div class="row justify-content-center mx-3">
+
+    <table class="table table-hover table-bordered scrollable-table text-center tb ">
+
+        <thead class='table-dark tb'>
+            <tr>
+                <th colspan="1" scope="col">매체</th>
+                <th colspan="3" scope="col">에이디엔 </th>
+                <th colspan="3" scope="col">쿠팡 </th>
+                <th colspan="3" scope="col">크리테오 </th>
+                <th colspan="3" scope="col">11번가 </th>
+                <th colspan="3" scope="col">페이스북 </th>
+                <th colspan="3" scope="col">지마켓 </th>
+                <th colspan="3" scope="col">인터파크 </th>
+                <th colspan="3" scope="col">카카오 </th>
+                <th colspan="3" scope="col">카카오스타일 </th>
+                <th colspan="3" scope="col">네이버 </th>
+                <th colspan="3" scope="col">네이버지에프에이 </th>
+                <th colspan="3" scope="col">쓱 </th>
+                <th colspan="3" scope="col">티지 </th>
+                <th colspan="3" scope="col">티몬 </th>
+                <th colspan="3" scope="col">위메프 </th>
+                <th colspan="3" scope="col">구글 </th>
+                <th colspan="3" scope="col">모본 </th>
+                <th colspan="3" scope="col">디에이 </th>
+                <th colspan="3" scope="col">기타 </th>
+                <th colspan="2" scope="col">맵핑수(누적) </th>
+                <th colspan="3" scope="col">전매체 Live 계정수 </th>
+
+            </tr>
+            <tr>
+                <th scope="col">팀원</th>
+                <th scope="col">전전주매출</th>
+                <th scope="col">전주매출 </th>
+                <th scope="col">성장률 </th>
+                <th scope="col">전전주매출</th>
+                <th scope="col">전주매출 </th>
+                <th scope="col">성장률 </th>
+                <th scope="col">전전주매출</th>
+                <th scope="col">전주매출 </th>
+                <th scope="col">성장률 </th>
+                <th scope="col">전전주매출</th>
+                <th scope="col">전주매출 </th>
+                <th scope="col">성장률 </th>
+                <th scope="col">전전주매출</th>
+                <th scope="col">전주매출 </th>
+                <th scope="col">성장률 </th>
+                <th scope="col">전전주매출</th>
+                <th scope="col">전주매출 </th>
+                <th scope="col">성장률 </th>
+                <th scope="col">전전주매출</th>
+                <th scope="col">전주매출 </th>
+                <th scope="col">성장률 </th>
+                <th scope="col">전전주매출</th>
+                <th scope="col">전주매출 </th>
+                <th scope="col">성장률 </th>
+                <th scope="col">전전주매출</th>
+                <th scope="col">전주매출 </th>
+                <th scope="col">성장률 </th>
+                <th scope="col">전전주매출</th>
+                <th scope="col">전주매출 </th>
+                <th scope="col">성장률 </th>
+                <th scope="col">전전주매출</th>
+                <th scope="col">전주매출 </th>
+                <th scope="col">성장률 </th>
+                <th scope="col">전전주매출</th>
+                <th scope="col">전주매출 </th>
+                <th scope="col">성장률 </th>
+                <th scope="col">전전주매출</th>
+                <th scope="col">전주매출 </th>
+                <th scope="col">성장률 </th>
+                <th scope="col">전전주매출</th>
+                <th scope="col">전주매출 </th>
+                <th scope="col">성장률 </th>
+                <th scope="col">전전주매출</th>
+                <th scope="col">전주매출 </th>
+                <th scope="col">성장률 </th>
+                <th scope="col">전전주매출</th>
+                <th scope="col">전주매출 </th>
+                <th scope="col">성장률 </th>
+                <th scope="col">전전주매출</th>
+                <th scope="col">전주매출 </th>
+                <th scope="col">성장률 </th>
+                <th scope="col">전전주매출</th>
+                <th scope="col">전주매출 </th>
+                <th scope="col">성장률 </th>
+                <th scope="col">전전주매출</th>
+                <th scope="col">전주매출 </th>
+                <th scope="col">성장률 </th>
+
+                <th scope="col">신규 </th>
+                <th scope="col">이관 </th>
+                <th scope="col">전전주 </th>
+                <th scope="col">전주 </th>
+                <th scope="col">증감 </th>
+
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+
+            {% for name, company in data.items %}
+            <tr>
+                {% if name in selectedName %}
+                <th scope="row">{{ name }}</th>
+                {% for com, values in company.items %}
+                {% for k, v in values.items %}
+                {% if k == 'growth_rate' %}
+                    <td>{{ v }}%</td>
+                {% else %}
+                    <td>{{ v }}</td>
+
+                {% endif %}
+                {% endfor %}
+
+                {% endfor %}
+                <td>{{ company.new }}</td>
+                <td>{{ company.escalation }}</td>
+                <td>{{ company.before_last_live }}</td>
+                <td>{{ company.last_live }}</td>
+                <td>{{ company.increase }}</td>
+                {% endif %}
+
+
+            </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+<br>
+
+</div>
+
+
+<div class="row justify-content-center mx-3 text-center">
+
+    <table class="table table-hover table-bordered scrollable-table tb">
+        <thead class='table-dark tb'>
+            <tr>
+                <th rowspan="2" scope="col" class="vertical-align-middle">팀원</th>
+                <th colspan="4" scope="col">전매체 총 매출 </th>
+                <th rowspan="2" scope="col" class="vertical-align-middle">주력매체 </th>
+                <th rowspan="2" scope="col" class="vertical-align-middle">DB수집방식 </th>
+                <th rowspan="2" scope="col" class="vertical-align-middle">영업방식 </th>
+            </tr>
+            <tr>
+                <th scope="col">전월매출</th>
+                <th scope="col">당월누적매출 </th>
+                <th scope="col">예상매출 </th>
+                <th scope="col">예상 증감</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            {% for name, company in data.items %}
+            <tr>
+                {% if name in selectedName %}
+                <th scope="row">{{ name }}</th>
+                <td>{{ company.previous_month_sales }}</td>
+                <td>{{ company.current_month_sales }}</td>
+                <td>{{ company.estimated_sales }}</td>
+                <td>{{ company.estimated_growth }}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                {% endif %}
+
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+{% endblock %}
