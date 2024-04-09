@@ -607,3 +607,151 @@ def data_process(members):
         data[name]['estimated_growth'] = estimated_growth
    
     return data
+
+
+
+############################### 2번 서버 #####################################
+def fetch_team_data2(request):
+    member_code = request.GET.get('member_code')
+    if not member_code:
+        return JsonResponse({'error': 'No team code provided'}, status=400)
+
+    members = T_USERS.objects.filter(username=member_code)
+
+    names = []
+    for m in members:
+        names.append(m.username)
+    
+    data = data_process2(names)
+    company_list = {}
+    
+    for com in company:
+        company_list[com] = 0
+    
+    return JsonResponse({'members': data, 'selected' : names, 'company': company_list}, safe=False)
+
+
+############################### 2번 서버 후처리 ###############################
+def data_process2(members):
+    
+    data = {}
+    # 선택된 이름을 받아옵니다.
+    selected_names = members
+    
+    for n in selected_names:
+        data[n] = {}
+    
+    # 현재 날짜를 기준으로 전주와 전전주 날짜를 계산합니다.
+    today = date(2024, 2, 7)  # 기준 날짜를 2023년 2월 5일로 설정
+    last_week_start, last_week_end = get_previous_week_dates(today - timedelta(weeks=1))
+    week_before_last_start, week_before_last_end = get_previous_week_dates(today - timedelta(weeks=2))
+
+    # 현재 날짜를 기준으로 전월달 과 현재까지를 계산합니다.
+    previous_month_start, previous_month_end = get_previous_month_range(today)
+    current_month_start = today.replace(day=1)
+
+    # 모든 관련 데이터를 한 번에 조회합니다.
+    last_week_data = T_Sales_Day.objects.filter(
+        media_id__in=company,
+        mkt_nm__in=selected_names,
+        sale_date__range=[last_week_start, last_week_end]
+    ).values('media_id', 'mkt_nm').annotate(total=Sum('tot_amt'))
+
+    week_before_last_data = T_Sales_Day.objects.filter(
+        media_id__in=company,
+        mkt_nm__in=selected_names,
+        sale_date__range=[week_before_last_start, week_before_last_end]
+    ).values('media_id', 'mkt_nm').annotate(total=Sum('tot_amt'))
+
+    # 데이터를 파싱하여 처리합니다.
+    last_week_totals = { (d['media_id'], d['mkt_nm']): d['total'] for d in last_week_data }
+    week_before_last_totals = { (d['media_id'], d['mkt_nm']): d['total'] for d in week_before_last_data }
+
+
+    for name in selected_names:
+        for com in company:
+            last_week_total = last_week_totals.get((com, name), 0)
+            week_before_last_total = week_before_last_totals.get((com, name), 0)
+            growth_rate = calculate_growth(last_week_total, week_before_last_total)
+            # 결과 저장
+            data[name][com] = {
+                'last_week_total': round(last_week_total),
+                'week_before_last_total': round(week_before_last_total),
+                'growth_rate': round(growth_rate)
+            }
+            
+                    
+        #########################
+        # 신규, 이관을 계산합니다 #
+        #########################
+        
+        # 신규
+        new = T_TRANSFER.objects.filter(
+            mkt_nm=name,
+            trns_gbn=1
+        ).count()
+        
+        # 이관
+        escalation = T_TRANSFER.objects.filter(
+            mkt_nm=name,
+            trns_gbn = 2
+        ).count()
+        
+        data[name]['new'] = new
+        data[name]['escalation'] = escalation    
+            
+            
+        #################################
+        # 전매체 Live 계정수를 계산합니다 #
+        #################################   
+
+        # 전전주 Live 계정수
+        before_last_live = T_Sales_Day.objects.filter(
+            mkt_nm=name,
+            tot_amt__gt=0,  # tot_amt가 0보다 큰 조건 추가
+            sale_date__range=[week_before_last_start, week_before_last_end]
+        ).count()  # 객체의 개수를 세는 메소드 사용
+
+        # 전주 Live 계정수
+        last_live = T_Sales_Day.objects.filter(
+            mkt_nm=name,
+            tot_amt__gt=0,  # tot_amt가 0보다 큰 조건 추가
+            sale_date__range=[last_week_start, last_week_end]
+        ).count()  # 객체의 개수를 세는 메소드 사용s
+        
+        # 증감
+        increase = last_live-before_last_live
+        
+        data[name]['before_last_live'] = before_last_live
+        data[name]['last_live'] = last_live
+        data[name]['increase'] = increase
+
+        
+        ###########################################
+        # 전월매출, 당월누적매출, 예상매출, 예상증감 #
+        ###########################################
+        
+        # 전월 매출 
+        previous_month_sales = round(T_Sales_Day.objects.filter(
+                mkt_nm=name,
+            sale_date__range=[previous_month_start, previous_month_end]
+            ).aggregate(total=Sum('tot_amt'))['total'] or 0)
+
+        # 당월 누적 매출
+        current_month_sales = round(T_Sales_Day.objects.filter(
+            mkt_nm=name,
+            sale_date__range=[current_month_start, today]
+        ).aggregate(total=Sum('tot_amt'))['total'] or 0)
+
+        # 예상 매출 계산 (단순화된 예상치 계산)
+        estimated_sales = round((current_month_sales / today.day) * 30 if today.day != 0 else 0
+)
+        # 예상 증감
+        estimated_growth = round(estimated_sales - previous_month_sales)
+        
+        data[name]['previous_month_sales'] = previous_month_sales
+        data[name]['current_month_sales'] = current_month_sales
+        data[name]['estimated_sales'] = estimated_sales
+        data[name]['estimated_growth'] = estimated_growth
+   
+    return data

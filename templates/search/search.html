@@ -75,12 +75,52 @@ $(document).ready(function() {
             // 테이블 비우기
         }
     });
+
+    $('.all').change(function() {
+        var selectMember = $(this).val();
+        if (selectMember) {
+            $.ajax({
+                url: '{% url "fetch_team_data2" %}',  // Django URLconf에 해당 경로 추가 필요
+                data: {'member_code': selectMember},
+                dataType: 'json',
+                success: function(data) {
+                    for(member in data.members) {
+                        for (com in data.company){
+                            console.log(com)
+                            console.log(data.members[member][com].week_before_last_total)
+                            console.log(data.members[member][com].last_week_total)
+                            console.log(data.members[member][com].growth_rate)
+                        }
+                        console.log('-----------------------------------------')
+                        console.log(data.members[member].new)
+                        console.log(data.members[member].escalation)
+                        console.log(data.members[member].before_last_live)
+                        console.log(data.members[member].last_live)
+                        console.log(data.members[member].increase)
+                        console.log(data.members[member].previous_month_sales)
+                        console.log(data.members[member].current_month_sales)
+                        console.log(data.members[member].estimated_sales)
+                        console.log(data.members[member].estimated_growth)
+                        console.log('-----------------------------------------')
+                    }
+                    updateTable(data)
+                },
+                error: function() {
+                    alert('Error loading data');
+                }
+            });
+        } else {
+            // 팀이 선택되지 않은 경우
+            // 테이블 비우기
+        }
+    });
 });
 
 function updateTable(data) {
     var $table = $('#team-members-table tbody');
     var $table2 = $('#team-members-table2 tbody');
 
+    
     $table.empty(); // 테이블 내용 비우기
     $table2.empty(); // 테이블 내용 비우기
 
@@ -107,6 +147,8 @@ function updateTable(data) {
         row2 += '<td>' + data.members[member].current_month_sales + '</td>';
         row2 += '<td>' + data.members[member].estimated_sales + '</td>';
         row2 += '<td>' + data.members[member].estimated_growth + '</td>';
+        row2 += '<td>' + '</td>' + '<td>' + '</td>' + '<td>' + '</td>' ;
+
         row2 += '</tr>';
 
         $table.append(row);
@@ -134,20 +176,20 @@ function updateTable(data) {
         
             <div class='col-6 col-md-5 col-lg-4 col-xl-3'>
                 <!-- 전체 멤버를 위한 드롭다운 -->
-                <select id="members-all" class="member-select form-select form-select-lg ">
+                <select id="members-all" class="member-select form-select form-select-lg all">
                     <option value="">멤버선택</option>
                     {% for member in members %}
-                    <option value="{{ member.uid }}">{{ member.username }}</option>
+                    <option value="{{ member.username }}">{{ member.username }}</option>
                     {% endfor %}
                 </select>
         
                 <!-- 각 팀별 멤버를 위한 드롭다운 -->
                 {% for team in teams %}
-                <select id="members-{{ team.dept_code }}" class="member-select form-select form-select-lg " style="display:none;">
+                <select id="members-{{ team.dept_code }}" class="member-select form-select form-select-lg all" style="display:none;">
                     <option value="">멤버선택</option>
                     {% for member in members %}
                     {% if member.dept_code == team.dept_code %}
-                    <option value="{{ member.uid }}">{{ member.username }}</option>
+                    <option value="{{ member.username }}">{{ member.username }}</option>
                     {% endif %}
                     {% endfor %}
                 </select>
