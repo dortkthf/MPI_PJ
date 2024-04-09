@@ -475,16 +475,23 @@ def fetch_team_data(request):
         names.append(m.username)
     
     data = data_process(names)
+    company_list = {}
+    
+    for com in company:
+        company_list[com] = 0
+    
+    return JsonResponse({'members': data, 'selected' : names, 'company': company_list}, safe=False)
 
-    return JsonResponse({'members': member_data}, safe=False)
-#######################################################################
 
 ############################### 1번 서버 후처리 ###############################
 def data_process(members):
     
+    data = {}
     # 선택된 이름을 받아옵니다.
     selected_names = members
-    print(selected_names)
+    
+    for n in selected_names:
+        data[n] = {}
     
     # 현재 날짜를 기준으로 전주와 전전주 날짜를 계산합니다.
     today = date(2024, 2, 7)  # 기준 날짜를 2023년 2월 5일로 설정

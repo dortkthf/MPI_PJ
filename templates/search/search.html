@@ -45,8 +45,26 @@ $(document).ready(function() {
                 data: {'team_code': selectedTeam},
                 dataType: 'json',
                 success: function(data) {
-                    console.log(data.members[0].uid)
-                    updateTable(data.members);
+                    for(member in data.members) {
+                        for (com in data.company){
+                            console.log(com)
+                            console.log(data.members[member][com].week_before_last_total)
+                            console.log(data.members[member][com].last_week_total)
+                            console.log(data.members[member][com].growth_rate)
+                        }
+                        console.log('-----------------------------------------')
+                        console.log(data.members[member].new)
+                        console.log(data.members[member].escalation)
+                        console.log(data.members[member].before_last_live)
+                        console.log(data.members[member].last_live)
+                        console.log(data.members[member].increase)
+                        console.log(data.members[member].previous_month_sales)
+                        console.log(data.members[member].current_month_sales)
+                        console.log(data.members[member].estimated_sales)
+                        console.log(data.members[member].estimated_growth)
+                        console.log('-----------------------------------------')
+                    }
+                    updateTable(data)
                 },
                 error: function() {
                     alert('Error loading data');
@@ -59,17 +77,42 @@ $(document).ready(function() {
     });
 });
 
-function updateTable(members) {
+function updateTable(data) {
     var $table = $('#team-members-table tbody');
-    $table.empty(); // 테이블 내용 비우기
+    var $table2 = $('#team-members-table2 tbody');
 
-    members.forEach(function(member) {
-        var row = '<tr>' +
-            '<td>' + member.username + '</td>' +
-            '<td>' + member.dept_code + '</td>' +
-            '</tr>';
+    $table.empty(); // 테이블 내용 비우기
+    $table2.empty(); // 테이블 내용 비우기
+
+    for(member in data.members) {
+        var row = '<tr>'
+        var row2 = '<tr>'
+        row += '<th scope="row">' + member + '</th>'
+        row2 += '<th scope="row">' + member + '</th>'
+
+        for (com in data.company){
+            row += '<td>' + data.members[member][com].week_before_last_total + '</td>';
+            row += '<td>' + data.members[member][com].last_week_total + '</td>';
+            row += '<td>' + data.members[member][com].growth_rate + '</td>';
+        }
+
+        row += '<td>' + data.members[member].new + '</td>';
+        row += '<td>' + data.members[member].escalation + '</td>';
+        row += '<td>' + data.members[member].before_last_live + '</td>';
+        row += '<td>' + data.members[member].last_live + '</td>';
+        row += '<td>' + data.members[member].increase + '</td>';
+        row += '</tr>';
+
+        row2 += '<td>' + data.members[member].previous_month_sales + '</td>';
+        row2 += '<td>' + data.members[member].current_month_sales + '</td>';
+        row2 += '<td>' + data.members[member].estimated_sales + '</td>';
+        row2 += '<td>' + data.members[member].estimated_growth + '</td>';
+        row2 += '</tr>';
+
         $table.append(row);
-    });
+        $table2.append(row2);
+
+    }
 }
 </script>
 
@@ -134,7 +177,7 @@ function updateTable(members) {
 <br>
 <div class="row justify-content-center mx-3 my-4">
 
-    <table class="table table-hover table-bordered scrollable-table text-center tb ">
+    <table class="table table-hover table-bordered scrollable-table text-center tb " id='team-members-table'>
 
         <thead class='table-dark tb'>
             <tr>
@@ -212,7 +255,7 @@ function updateTable(members) {
 
 <div class="row justify-content-center mx-3 text-center">
 
-    <table class="table table-hover table-bordered scrollable-table tb">
+    <table class="table table-hover table-bordered scrollable-table tb" id='team-members-table2'>
         <thead class='table-dark tb'>
             <tr>
                 <th rowspan="2" scope="col" class="vertical-align-middle">팀원</th>
