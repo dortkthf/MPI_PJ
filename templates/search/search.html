@@ -29,153 +29,68 @@
 </style>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
-$(document).ready(function() {
-    $('#team-select').change(function() {
-        var selectedTeam = $(this).val();
-        $('.member-select').hide(); // 모든 멤버 선택 드롭다운 숨기기
-        if (selectedTeam === "") {
-            $('#members-all').show(); // 모든 멤버 표시
-        } else {
-            $('#members-' + selectedTeam).show(); // 선택된 팀의 멤버만 표시
-        }
-        if (selectedTeam) {
-            $.ajax({
-                url: '{% url "fetch_team_data" %}',  // Django URLconf에 해당 경로 추가 필요
-                data: {'team_code': selectedTeam},
-                dataType: 'json',
-                success: function(data) {
-                    updateTable(data)
-                },
-                error: function() {
-                    alert('Error loading data');
-                }
-            });
-        } else {
-            // 팀이 선택되지 않은 경우
-            // 테이블 비우기
-        }
-    });
 
-    $('.all').change(function() {
-        var selectMember = $(this).val();
-        if (selectMember) {
-            $.ajax({
-                url: '{% url "fetch_team_data" %}',  // Django URLconf에 해당 경로 추가 필요
-                data: {'member_code': selectMember},
-                dataType: 'json',
-                success: function(data) {
-                    updateTable(data)
-                },
-                error: function() {
-                    alert('Error loading data');
-                }
-            });
-        } else {
-            // 팀이 선택되지 않은 경우
-            // 테이블 비우기
-        }
-    });
-});
-
-function updateTable(data) {
-    var $table = $('#team-members-table tbody');
-    var $table2 = $('#team-members-table2 tbody');
-
-    
-    $table.empty(); // 테이블 내용 비우기
-    $table2.empty(); // 테이블 내용 비우기
-
-    for(member in data.members) {
-        var row = '<tr>'
-        var row2 = '<tr>'
-        row += '<th scope="row">' + member + '</th>'
-        row2 += '<th scope="row">' + member + '</th>'
-
-        for (com in data.company){
-            row += '<td>' + data.members[member][com].week_before_last_total + '</td>';
-            row += '<td>' + data.members[member][com].last_week_total + '</td>';
-            row += '<td>' + data.members[member][com].growth_rate + '</td>';
-        }
-
-        row += '<td>' + data.members[member].new + '</td>';
-        row += '<td>' + data.members[member].escalation + '</td>';
-        row += '<td>' + data.members[member].before_last_live + '</td>';
-        row += '<td>' + data.members[member].last_live + '</td>';
-        row += '<td>' + data.members[member].increase + '</td>';
-        row += '</tr>';
-
-        row2 += '<td>' + data.members[member].previous_month_sales + '</td>';
-        row2 += '<td>' + data.members[member].current_month_sales + '</td>';
-        row2 += '<td>' + data.members[member].estimated_sales + '</td>';
-        row2 += '<td>' + data.members[member].estimated_growth + '</td>';
-        row2 += '<td>' + '</td>' + '<td>' + '</td>' + '<td>' + '</td>' ;
-
-        row2 += '</tr>';
-
-        $table.append(row);
-        $table2.append(row2);
-
-    }
-}
-</script>
 
 <h1 class="text-center fw-bold my-5">주간 업무 미팅 자료</h1>
 
 
 <div class="text-center">
-    <form method="post" action="">
-        {% csrf_token %}
-        <div class='my-3 mx-4 row justify-content-center'>
-            <div class='col-6 col-md-5 col-lg-4 col-xl-3'>
-                <select id="team-select" class='form-select form-select-lg mb-2'>
-                    <option value="" class=>팀선택</option>
-                    {% for team in teams %}
-                    <option value="{{ team.dept_code }}">{{ team.dept_name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        
-            <div class='col-6 col-md-5 col-lg-4 col-xl-3'>
-                <!-- 전체 멤버를 위한 드롭다운 -->
-                <select id="members-all" class="member-select form-select form-select-lg all">
-                    <option value="">멤버선택</option>
-                    {% for member in members %}
-                    <option value="{{ member.username }}">{{ member.username }}</option>
-                    {% endfor %}
-                </select>
-        
-                <!-- 각 팀별 멤버를 위한 드롭다운 -->
+    <div class='my-3 mx-4 row justify-content-center'>
+        <div class='col-5 col-md-5 col-lg-4 p-0 d-grid me-3'>
+            <select id="team-select" class='form-select form-select-lg'>
+                <option value="">팀선택</option>
                 {% for team in teams %}
-                <select id="members-{{ team.dept_code }}" class="member-select form-select form-select-lg all" style="display:none;">
-                    <option value="">멤버선택</option>
-                    {% for member in members %}
-                    {% if member.dept_code == team.dept_code %}
-                    <option value="{{ member.username }}">{{ member.username }}</option>
-                    {% endif %}
-                    {% endfor %}
-                </select>
+                <option value="{{ team.dept_code }}">{{ team.dept_name }}</option>
                 {% endfor %}
-            </div>
+            </select>
         </div>
-
-        {% comment %} {% csrf_token %}
-        <!-- 각 이름에 대한 체크박스를 생성합니다. -->
-
-        {% for name in names %}
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" id="{{ name }}" name="names" value="{{ name }}"
-            {% if name in selectedName %} checked {% endif %}>
-            <label class="form-check-label" for="{{ name }}">{{ name }}</label>
+    
+        <div class='col-5 col-md-5 col-lg-4 p-0 d-grid ms-3'>
+            <!-- 전체 멤버를 위한 드롭다운 -->
+            <select id="members-all" class="member-select form-select form-select-lg all">
+                <option value="">멤버선택</option>
+                {% for member in members %}
+                <option value="{{ member.username }}">{{ member.username }}</option>
+                {% endfor %}
+            </select>
+    
+            <!-- 각 팀별 멤버를 위한 드롭다운 -->
+            {% for team in teams %}
+            <select id="members-{{ team.dept_code }}" class="member-select form-select form-select-lg all" style="display:none;">
+                <option value="">멤버선택</option>
+                {% for member in members %}
+                {% if member.dept_code == team.dept_code %}
+                <option value="{{ member.username }}">{{ member.username }}</option>
+                {% endif %}
+                {% endfor %}
+            </select>
+            {% endfor %}
         </div>
-        {% endfor %}
-        <br> {% endcomment %}
-
-        <div class="text-center">
-            <button type="submit" class="btn btn-primary mt-4 me-1">Generate Report</button>
-            <button name="export_excel" class="btn btn-success fw-bold mt-4 ms-1">엑셀파일 다운로드</button>
+    </div>
+    <div class='my-3 mx-4 row justify-content-center'>
+        <div class='col-4 col-lg-3 p-0'>
+            <!-- 날짜 선택 -->
+            <input type="date" id="date-select" class="form-control" placeholder="날짜 선택">
         </div>
-    </form>
+        <div class='col-3 col-lg-2 p-0 d-grid gap-2 mx-3'>
+            <button class="btn btn-primary fw-bold" id='select_date_search'>기준선택</button>
+        </div>
+        <div class="col-3 col-lg-3 p-0 d-grid gap-2">
+            <button class="btn btn-success fw-bold" id='export_excel'>엑셀파일</button>
+        </div>
+    </div>
+
+
+    <div id="week-ranges" class='my-3 mx-4 row justify-content-center text-center my-3 "' style="display: none;">
+        <div class='col-5 col-md-5 col-lg-4 p-0 d-grid me-3 fw-bold'>
+            <span id="previous-week"></span>
+        </div>
+    
+        <div class='col-5 col-md-5 col-lg-4 p-0 d-grid ms-3 fw-bold'>
+            <span id="last-week"></span>
+        </div>
+    </div>
+
 </div>
 
 <br>
@@ -223,32 +138,6 @@ function updateTable(data) {
         </thead>
         <tbody class="table-group-divider">
 
-            {% for name, company in data.items %}
-            <tr>
-                {% if name in selectedName %}
-                <th scope="row">{{ name }}</th>
-                {% for com, values in company.items %}
-                {% for k, v in values.items %}
-                {% if k == 'growth_rate' %}
-                    <td>{{ v }}%</td>
-                {% else %}
-                    <td>{{ v }}</td>
-
-                {% endif %} 
-                {% endfor %}
-
-                {% endfor %}
-                <td>{{ company.new }}</td>
-                <td>{{ company.escalation }}</td>
-                <td>{{ company.before_last_live }}</td>
-                <td>{{ company.last_live }}</td>
-                <td>{{ company.increase }}</td>
-                {% endif %}
-
-
-            </tr>
-            {% endfor %}
-
         </tbody>
     </table>
 </div>
@@ -276,24 +165,258 @@ function updateTable(data) {
             </tr>
         </thead>
         <tbody class="table-group-divider">
-            {% for name, company in data.items %}
-            <tr>
-                {% if name in selectedName %}
-                <th scope="row">{{ name }}</th>
-                <td>{{ company.previous_month_sales }}</td>
-                <td>{{ company.current_month_sales }}</td>
-                <td>{{ company.estimated_sales }}</td>
-                <td>{{ company.estimated_growth }}</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                {% endif %}
-
-
-            </tr>
-            {% endfor %}
         </tbody>
     </table>
 
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('#team-select').change(function() {
+            var selectedTeam = $(this).val();
+            $('.member-select').hide(); // 모든 멤버 선택 드롭다운 숨기기
+            if (selectedTeam === "") {
+                $('#members-all').show(); // 모든 멤버 표시
+            } else {
+                $('#members-' + selectedTeam).show(); // 선택된 팀의 멤버만 표시
+            }
+        });
+
+        $('#select_date_search').click(function() {
+            var selectedDate = $('#date-select').val();
+            var selectedTeam = $('#team-select').val();
+            
+            if (selectedTeam === "") {
+                var selectMember = $('#members-all').val(); // 모든 멤버 표시
+            } else {
+                var selectMember = $('#members-' + selectedTeam).val(); // 선택된 팀의 멤버만 표시
+            }
+
+            if (!selectedDate) {
+                $('#week-ranges').hide();
+                if (selectedTeam && selectMember) {
+                    $.ajax({
+                        url: '{% url "fetch_team_data" %}',  // Django URLconf에 해당 경로 추가 필요
+                        data: {'member_code': selectMember},
+                        dataType: 'json',
+                        success: function(data) {
+                            updateTable(data)
+                        },
+                        error: function() {
+                            alert('Error loading data');
+                        }
+                    });
+                } else if (selectedTeam) {
+                    $.ajax({
+                        url: '{% url "fetch_team_data" %}',  // Django URLconf에 해당 경로 추가 필요
+                        data: {'team_code': selectedTeam},
+                        dataType: 'json',
+                        success: function(data) {
+                            updateTable(data)
+                        },
+                        error: function() {
+                            alert('Error loading data');
+                        }
+                    });
+                } else if (selectMember) {
+                    $.ajax({
+                        url: '{% url "fetch_team_data" %}',  // Django URLconf에 해당 경로 추가 필요
+                        data: {'member_code': selectMember},
+                        dataType: 'json',
+                        success: function(data) {
+                            updateTable(data)
+                        },
+                        error: function() {
+                            alert('Error loading data');
+                        }
+                    });
+                } else {
+                    // 팀이 선택되지 않은 경우
+                    // 테이블 비우기
+                }
+                return;
+            } else {
+                try {
+                    updateWeekRanges(selectedDate);
+                } catch (error) {
+                    console.error("날짜 처리 중 오류가 발생했습니다: ", error);
+                    alert('올바른 날짜를 선택하세요.');
+                    $('#week-ranges').hide(); // 오류 발생시 범위 숨기기
+                }
+                if (selectedTeam && selectMember) {
+                    $.ajax({
+                        url: '{% url "fetch_team_data" %}',  // Django URLconf에 해당 경로 추가 필요
+                        data: {'member_code': selectMember, 'ref_date' : selectedDate},
+                        dataType: 'json',
+                        success: function(data) {
+                            updateTable(data)
+                        },
+                        error: function() {
+                            alert('Error loading data');
+                        }
+                    });
+                } else if (selectedTeam) {
+                    $.ajax({
+                        url: '{% url "fetch_team_data" %}',  // Django URLconf에 해당 경로 추가 필요
+                        data: {'team_code': selectedTeam, 'ref_date' : selectedDate},
+                        dataType: 'json',
+                        success: function(data) {
+                            updateTable(data)
+                        },
+                        error: function() {
+                            alert('Error loading data');
+                        }
+                    });
+                } else if (selectMember) {
+                    $.ajax({
+                        url: '{% url "fetch_team_data" %}',  // Django URLconf에 해당 경로 추가 필요
+                        data: {'member_code': selectMember, 'ref_date' : selectedDate},
+                        dataType: 'json',
+                        success: function(data) {
+                            updateTable(data)
+                        },
+                        error: function() {
+                            alert('Error loading data');
+                        }
+                    });
+                } else {
+                    // 팀이 선택되지 않은 경우
+                    // 테이블 비우기
+                }
+                return;
+            }
+         
+    
+            // 이제 selectedDate 변수에 선택된 날짜 값이 저장되어 있습니다.
+            console.log("선택된 날짜:", selectedDate);
+        });
+    
+    });
+
+    function updateTable(data) {
+        var $table = $('#team-members-table tbody');
+        var $table2 = $('#team-members-table2 tbody');
+    
+        
+        $table.empty(); // 테이블 내용 비우기
+        $table2.empty(); // 테이블 내용 비우기
+    
+        for(member in data.members) {
+            var row = '<tr>'
+            var row2 = '<tr>'
+            row += '<th scope="row">' + member + '</th>'
+            row2 += '<th scope="row">' + member + '</th>'
+    
+            for (com in data.company){
+                row += '<td>' + data.members[member][com].week_before_last_total + '</td>';
+                row += '<td>' + data.members[member][com].last_week_total + '</td>';
+                row += '<td class = "fw-bold">' + data.members[member][com].growth_rate + '% </td>';
+            }
+    
+            row += '<td>' + data.members[member].new + '</td>';
+            row += '<td>' + data.members[member].escalation + '</td>';
+            row += '<td>' + data.members[member].before_last_live + '</td>';
+            row += '<td>' + data.members[member].last_live + '</td>';
+            row += '<td>' + data.members[member].increase + '</td>';
+            row += '</tr>';
+    
+            row2 += '<td>' + data.members[member].previous_month_sales + '</td>';
+            row2 += '<td>' + data.members[member].current_month_sales + '</td>';
+            row2 += '<td>' + data.members[member].estimated_sales + '</td>';
+            row2 += '<td>' + data.members[member].estimated_growth + '</td>';
+            row2 += '<td>' + '</td>' + '<td>' + '</td>' + '<td>' + '</td>' ;
+    
+            row2 += '</tr>';
+    
+            $table.append(row);
+            $table2.append(row2);
+    
+        }
+    }
+
+    $('#export_excel').click(function() {
+        var selectedDate = $('#date-select').val();
+        var team_code = $('#team-select').val();
+
+        if (team_code === "") {
+            var member_code = $('#members-all').val(); // 모든 멤버 표시
+        } else {
+            var member_code = $('#members-' + team_code).val(); // 선택된 팀의 멤버만 표시
+        }
+
+        // 엑셀 다운로드 요청 URL 생성
+        var url = '{% url "sales_report" %}';
+        if (selectedDate) {
+            var params = {
+                export_excel: true,
+                selectedDate : selectedDate,
+            };
+        } else {
+            var params = {
+                export_excel: true,
+            }; 
+        }
+        if (team_code && member_code) {
+            params.team_code = team_code;
+            params.member_code = member_code;
+        } else if (team_code) {
+            params.team_code = team_code;
+        } else {
+            params.member_code = member_code;
+
+        }
+    
+        // 파일 다운로드 요청
+        $.ajax({
+            url: '{% url "sales_report" %}',  // Django URLconf에 해당 경로 추가 필요
+            data: params,
+            dataType: 'json',
+            success: function(response) {
+                window.location.href = response.url;
+            },
+            error: function() {
+                alert('Error downloading Excel file.');
+            }
+        });
+    });
+    function getWeekDates(baseDate) {
+        let date = new Date(baseDate);
+        let day = date.getDay();
+        let diff = date.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
+        let start = new Date(date.setDate(diff));
+        let end = new Date(start);
+        end.setDate(start.getDate() + 6);
+        return { start: start.toISOString().substring(0, 10), end: end.toISOString().substring(0, 10) };
+    };
+
+    function updateWeekRanges(baseDate) {
+        var date = new Date(baseDate + 'T00:00:00'); // 시간 구성 요소 추가하여 일관된 생성 보장
+        if (isNaN(date.getTime())) { // 유효하지 않은 날짜인 경우 예외 처리
+            throw new Error("Invalid date");
+        }
+
+        // 날짜 계산
+        var prevWeekStart = new Date(date.getTime());
+        prevWeekStart.setDate(date.getDate() - date.getDay() - 5 - 7);
+        var prevWeekEnd = new Date(prevWeekStart.getTime());
+        prevWeekEnd.setDate(prevWeekStart.getDate() + 6);
+
+        var lastWeekStart = new Date(prevWeekStart.getTime());
+        lastWeekStart.setDate(prevWeekStart.getDate() + 7);
+        var lastWeekEnd = new Date(lastWeekStart.getTime());
+        lastWeekEnd.setDate(lastWeekStart.getDate() + 6);
+
+        // 날짜 포맷 함수
+        var formatDate = function(date) {
+            return date.toISOString().substring(0, 10);
+        };
+
+        // DOM 업데이트
+        $('#previous-week').text(`전전주    ${formatDate(prevWeekStart)} ~ ${formatDate(prevWeekEnd)}`);
+        $('#last-week').text(`전주    ${formatDate(lastWeekStart)} ~ ${formatDate(lastWeekEnd)}`);
+        $('#week-ranges').show();
+    };
+
+    
+    </script>
 {% endblock %}

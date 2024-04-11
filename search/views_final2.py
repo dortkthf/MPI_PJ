@@ -1,18 +1,17 @@
 from django.shortcuts import render
 from db.models import *
-from django.http import HttpResponse, HttpResponseNotAllowed, JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.db.models import Sum,Q
 from django.utils import timezone
 import pandas as pd
 from io import BytesIO
 from datetime import datetime, timedelta, date
 
+
 from openpyxl.utils import get_column_letter
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font, PatternFill, Border, Side
 
-import os
-from django.conf import settings
 
 names = []
 
@@ -309,13 +308,17 @@ def export_to_excel(data, selected_names, company_list):
         ws.column_dimensions[get_column_letter(column[0].column)].width = adjusted_width
     
     # 버퍼를 통해 파일 저장
-    filename = "sales_report.xlsx"
-    file_path = os.path.join(settings.MEDIA_ROOT, filename)
-    wb.save(file_path)
+    output = BytesIO()
+    wb.save(output)
+    output.seek(0)
 
-    # 서버 내 파일 URL 생성
-    file_url = settings.MEDIA_URL + filename
-    return file_url
+    # HTTP 응답으로 엑셀 파일 전송
+    response = HttpResponse(
+        output.getvalue(),
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = 'attachment; filename="sales_report.xlsx"'
+    return response
 
 ##########################
 #### views.py 메인함수 ####
@@ -325,36 +328,12 @@ def sales_report(request):
     teams = T_DEPTS.objects.all()
     members = T_USERS.objects.all()
     
-    team_code = request.GET.get('team_code')
-    member_code = request.GET.get('member_code')
-    export_excel = request.GET.get('export_excel') == 'true'
-    selectedDate = request.GET.get('selectedDate')
-    
-    if selectedDate:
-        ref_date = datetime.strptime(selectedDate, '%Y-%m-%d').date()
-        today = ref_date
-    else:
-        today = date(2024, 2, 7)
-    
-    
-    
-    if team_code or member_code:
-        
-        if team_code and member_code:
-            members = T_USERS.objects.filter(username=member_code)
-        elif team_code: 
-            members = T_USERS.objects.filter(dept_code=team_code)
-        else:
-            members = T_USERS.objects.filter(username=member_code)
-        
-        selected_names = [m.username for m in members]
-
-        data = {}
-
-        for n in selected_names:
-            data[n] = {}
+    if request.method == 'POST':
+        # 선택된 이름을 받아옵니다.
+        selected_names = request.POST.getlist('names')
 
         # 현재 날짜를 기준으로 전주와 전전주 날짜를 계산합니다.
+        today = date(2024, 2, 7)  # 기준 날짜를 2023년 2월 5일로 설정
         last_week_start, last_week_end = get_previous_week_dates(today - timedelta(weeks=1))
         week_before_last_start, week_before_last_end = get_previous_week_dates(today - timedelta(weeks=2))
 
@@ -454,7 +433,7 @@ def sales_report(request):
 
             # 예상 매출 계산 (단순화된 예상치 계산)
             estimated_sales = round((current_month_sales / today.day) * 30 if today.day != 0 else 0
-    )
+)
             # 예상 증감
             estimated_growth = round(estimated_sales - previous_month_sales)
             
@@ -463,58 +442,64 @@ def sales_report(request):
             data[name]['estimated_sales'] = estimated_sales
             data[name]['estimated_growth'] = estimated_growth
             
-        if export_excel:
-            file_url = export_to_excel(data, selected_names, company)
-            full_url = request.build_absolute_uri(file_url)  # 완전한 URL 생성
-            return JsonResponse({'url': full_url})
         
+            if 'export_excel' in request.POST:
+                return export_to_excel(data, selected_names, company)
+            
         return render(request, 'search/search.html', {
             'teams': teams,
-        'members': members,
+            'members': members,
+            'names' : names,
+            'data' : data,
+            'selectedName' : selected_names
         })
     return render(request, 'search/search.html', {
             'teams': teams,
-        'members': members,
+           'members': members,
+            'names' : names
         })
+    
 ##############
 # 비동기 처리 #
 ############################### 1번 서버 #####################################
 def fetch_team_data(request):
     team_code = request.GET.get('team_code')
     member_code = request.GET.get('member_code')
-    ref_date_str = request.GET.get('ref_date')
-    # 문자열을 datetime.date 객체로 변환
     
-    if ref_date_str:
-        ref_date = datetime.strptime(ref_date_str, '%Y-%m-%d').date()
-        today = ref_date
-    else:
-        today = date(2024, 2, 7)
-    
+    if not team_code:
+        members = T_USERS.objects.filter(username=member_code)
+
+        names = []
+        for m in members:
+            names.append(m.username)
+        
+        data = data_process(names)
+        company_list = {}
+        
+        for com in company:
+            company_list[com] = 0
+        
+        return JsonResponse({'members': data, 'selected' : names, 'company': company_list}, safe=False)
+
+
+    members = T_USERS.objects.filter(dept_code=team_code)
+    member_data = list(members.values('uid', 'username', 'dept_code'))  # 데이터를 JSON으로 쉽게 만들 수 있는 구조로 변환
+
     names = []
+    for m in members:
+        names.append(m.username)
+    
+    data = data_process(names)
     company_list = {}
     
-    if team_code and member_code:
-        members = T_USERS.objects.filter(username=member_code)
-
-    elif team_code:
-        members = T_USERS.objects.filter(dept_code=team_code)
-
-    else:
-        members = T_USERS.objects.filter(username=member_code)
-    
-    for m in members:
-            names.append(m.username)
-    
     for com in company:
-            company_list[com] = 0
-    
-    data = data_process(names,today)
+        company_list[com] = 0
     
     return JsonResponse({'members': data, 'selected' : names, 'company': company_list}, safe=False)
 
+
 ############################### 1번 서버 후처리 ###############################
-def data_process(members, today):
+def data_process(members):
     
     data = {}
     # 선택된 이름을 받아옵니다.
@@ -524,7 +509,7 @@ def data_process(members, today):
         data[n] = {}
     
     # 현재 날짜를 기준으로 전주와 전전주 날짜를 계산합니다.
-    # 기준 날짜를 2023년 2월 5일로 설정
+    today = date(2024, 2, 7)  # 기준 날짜를 2023년 2월 5일로 설정
     last_week_start, last_week_end = get_previous_week_dates(today - timedelta(weeks=1))
     week_before_last_start, week_before_last_end = get_previous_week_dates(today - timedelta(weeks=2))
 
