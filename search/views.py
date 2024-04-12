@@ -16,6 +16,8 @@ from django.conf import settings
 
 names = []
 
+
+
 for u in T_USERS.objects.all():
     names.append(u.username)
 
@@ -322,6 +324,8 @@ def export_to_excel(data, selected_names, company_list):
 ##########################
 
 def sales_report(request):
+    today = datetime.now().date()
+    
     teams = T_DEPTS.objects.all()
     members = T_USERS.objects.all()
     
@@ -334,12 +338,9 @@ def sales_report(request):
         ref_date = datetime.strptime(selectedDate, '%Y-%m-%d').date()
         today = ref_date
     else:
-        today = date(2024, 2, 7)
-    
-    
+        today = datetime.now().date()
     
     if team_code or member_code:
-        
         if team_code and member_code:
             members = T_USERS.objects.filter(username=member_code)
         elif team_code: 
@@ -379,7 +380,6 @@ def sales_report(request):
         last_week_totals = { (d['media_id'], d['mkt_nm']): d['total'] for d in last_week_data }
         week_before_last_totals = { (d['media_id'], d['mkt_nm']): d['total'] for d in week_before_last_data }
 
-
         for name in selected_names:
             for com in company:
                 last_week_total = last_week_totals.get((com, name), 0)
@@ -391,7 +391,6 @@ def sales_report(request):
                     'week_before_last_total': round(week_before_last_total),
                     'growth_rate': round(growth_rate)
                 }
-                
                         
             ###### ###### ###### ###### ###### 
             ###### 신규, 이관을 계산합니다 ######
@@ -435,7 +434,6 @@ def sales_report(request):
             data[name]['last_live'] = last_live
             data[name]['increase'] = increase
 
-            
             ############# ###### ###### ###### ########
             # 전월매출, 당월누적매출, 예상매출, 예상증감 # 
             ###### ###### ###### ###### ###### ###### #
@@ -489,20 +487,19 @@ def fetch_team_data(request):
         ref_date = datetime.strptime(ref_date_str, '%Y-%m-%d').date()
         today = ref_date
     else:
-        today = date(2024, 2, 7)
+        today = datetime.now().date()
     
     names = []
     company_list = {}
     
     if team_code and member_code:
         members = T_USERS.objects.filter(username=member_code)
-
     elif team_code:
         members = T_USERS.objects.filter(dept_code=team_code)
-
-    else:
+    elif member_code:
         members = T_USERS.objects.filter(username=member_code)
-    
+    else:
+        members = T_USERS.objects.all()
     for m in members:
             names.append(m.username)
     

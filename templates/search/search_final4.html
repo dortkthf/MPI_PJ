@@ -185,15 +185,12 @@
         $('#select_date_search').click(function() {
             var selectedDate = $('#date-select').val();
             var selectedTeam = $('#team-select').val();
-            var selectMember = selectedTeam === "" ? $('#members-all').val() : $('#members-' + selectedTeam).val();
-
-            if (!selectedTeam && !selectMember) {
-                alert('팀 또는 멤버를 선택해주세요.');
-                return; // 함수 실행 중지
+            
+            if (selectedTeam === "") {
+                var selectMember = $('#members-all').val(); // 모든 멤버 표시
+            } else {
+                var selectMember = $('#members-' + selectedTeam).val(); // 선택된 팀의 멤버만 표시
             }
-
-
-            $(this).prop('disabled', true).text('불러오는 중...').addClass('btn-secondary').removeClass('btn-primary');
 
             if (!selectedDate) {
                 $('#week-ranges').hide();
@@ -204,11 +201,9 @@
                         dataType: 'json',
                         success: function(data) {
                             updateTable(data)
-                            $('#select_date_search').prop('disabled', false).text('기준선택').addClass('btn-primary').removeClass('btn-secondary');
                         },
                         error: function() {
                             alert('Error loading data');
-                            $('#select_date_search').prop('disabled', false).text('기준선택').addClass('btn-primary').removeClass('btn-secondary');
                         }
                     });
                 } else if (selectedTeam) {
@@ -218,11 +213,9 @@
                         dataType: 'json',
                         success: function(data) {
                             updateTable(data)
-                            $('#select_date_search').prop('disabled', false).text('기준선택').addClass('btn-primary').removeClass('btn-secondary');
                         },
                         error: function() {
                             alert('Error loading data');
-                            $('#select_date_search').prop('disabled', false).text('기준선택').addClass('btn-primary').removeClass('btn-secondary');
                         }
                     });
                 } else if (selectMember) {
@@ -232,11 +225,9 @@
                         dataType: 'json',
                         success: function(data) {
                             updateTable(data)
-                             $('#select_date_search').prop('disabled', false).text('기준선택').addClass('btn-primary').removeClass('btn-secondary');
                         },
                         error: function() {
                             alert('Error loading data');
-                             $('#select_date_search').prop('disabled', false).text('기준선택').addClass('btn-primary').removeClass('btn-secondary');
                         }
                     });
                 } else {
@@ -259,11 +250,9 @@
                         dataType: 'json',
                         success: function(data) {
                             updateTable(data)
-                             $('#select_date_search').prop('disabled', false).text('기준선택').addClass('btn-primary').removeClass('btn-secondary');
                         },
                         error: function() {
                             alert('Error loading data');
-                             $('#select_date_search').prop('disabled', false).text('기준선택').addClass('btn-primary').removeClass('btn-secondary');
                         }
                     });
                 } else if (selectedTeam) {
@@ -273,11 +262,9 @@
                         dataType: 'json',
                         success: function(data) {
                             updateTable(data)
-                             $('#select_date_search').prop('disabled', false).text('기준선택').addClass('btn-primary').removeClass('btn-secondary');
                         },
                         error: function() {
                             alert('Error loading data');
-                             $('#select_date_search').prop('disabled', false).text('기준선택').addClass('btn-primary').removeClass('btn-secondary');
                         }
                     });
                 } else if (selectMember) {
@@ -287,11 +274,9 @@
                         dataType: 'json',
                         success: function(data) {
                             updateTable(data)
-                             $('#select_date_search').prop('disabled', false).text('기준선택').addClass('btn-primary').removeClass('btn-secondary');
                         },
                         error: function() {
                             alert('Error loading data');
-                             $('#select_date_search').prop('disabled', false).text('기준선택').addClass('btn-primary').removeClass('btn-secondary');
                         }
                     });
                 } else {
@@ -352,8 +337,6 @@
     $('#export_excel').click(function() {
         var selectedDate = $('#date-select').val();
         var team_code = $('#team-select').val();
-        $(this).prop('disabled', true).text('다운로드 중...').addClass('btn-secondary').removeClass('btn-success');
-
 
         if (team_code === "") {
             var member_code = $('#members-all').val(); // 모든 멤버 표시
@@ -390,12 +373,9 @@
             dataType: 'json',
             success: function(response) {
                 window.location.href = response.url;
-                $('#export_excel').prop('disabled', false).text('엑셀파일').addClass('btn-success').removeClass('btn-secondary');
-
             },
             error: function() {
                 alert('Error downloading Excel file.');
-                $('#export_excel').prop('disabled', false).text('엑셀파일').addClass('btn-success').removeClass('btn-secondary');
             }
         });
     });
