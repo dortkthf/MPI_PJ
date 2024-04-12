@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from db.models import *
 from django.http import HttpResponse, HttpResponseNotAllowed, JsonResponse
-from django.db.models import Sum,Q
+from django.db.models import Sum,Q, Avg, Count
 from django.utils import timezone
 import pandas as pd
 from io import BytesIO
@@ -52,6 +52,50 @@ def calculate_growth(last_week_total, week_before_last_total):
         return 0
     else:
         return (last_week_total / week_before_last_total * 100)
+
+def seconds_to_hms(seconds):
+    # 반올림 처리
+    seconds = round(seconds)
+    # 시간, 분, 초 계산
+    hours = seconds // 3600
+    minutes = (seconds % 3600) // 60
+    seconds = seconds % 60
+    # 포매팅된 문자열 반환
+    return f"{hours:02}:{minutes:02}:{seconds:02}"
+
+def calculate_weekly_call_data(data, today, user_data):
+    last_week_start, last_week_end = get_previous_week_dates(today - timedelta(weeks=1))
+    week_before_last_start, week_before_last_end = get_previous_week_dates(today - timedelta(weeks=2))
+
+    # 전주 평균 콜 시간과 콜 수
+    last_week_avg_data = T_CALL_DAY_LIST.objects.filter(
+        call_date__range=[last_week_start, last_week_end],
+        sender__in = user_data
+    ).values('sender').annotate(
+        avg_call_duration=Avg('time_to_sec'),
+        call_count=Count('call_id')
+    )
+
+    # 전전주 평균 콜 시간과 콜 수
+    week_before_last_avg_data = T_CALL_DAY_LIST.objects.filter(
+        call_date__range=[week_before_last_start, week_before_last_end],
+        sender__in = user_data
+    ).values('sender').annotate(
+        avg_call_duration=Avg('time_to_sec'),
+        call_count=Count('call_id')
+    )
+
+    for call in last_week_avg_data:
+        data[user_data[call['sender']]]['last_avg_call_duration'] = seconds_to_hms(call['avg_call_duration'])
+        data[user_data[call['sender']]]['last_call_count'] = call['call_count']
+    for call in week_before_last_avg_data:
+        data[user_data[call['sender']]]['b_last_avg_call_duration'] = seconds_to_hms(call['avg_call_duration'])
+        data[user_data[call['sender']]]['b_last_call_count'] = call['call_count']
+    
+    for d in user_data:
+        print(data[user_data[d]],'\n')
+        
+    return data
 
 # 엑셀파일 생성 및 다운로드
 
@@ -153,11 +197,97 @@ def create_excel_header(worksheet, company_list):
         cell.border = border
         col_idx += 1
 
-
 ######################
 ####### 두번째 헤더생성
 ######################
 def create_excel_header2(worksheet, row_num):
+    col_idx = 1
+    
+    cell = worksheet.cell(row=row_num, column=col_idx)
+    worksheet.merge_cells(start_row=row_num, start_column=col_idx, end_row=row_num+1, end_column=col_idx)
+    cell.value = '팀원'
+    cell.font = header_font
+    cell.fill = header_fill
+    cell.alignment = header_align
+    cell.border = border
+    col_idx += 1
+    
+    headers = ['업무', '평균콜수', '평균콜시간', '평균콜수', '평균콜시간']
+    # 첫 번째 행의 헤더 설정
+    for sub_header in headers:
+        cell = worksheet.cell(row=row_num, column=col_idx)
+        cell.value = sub_header
+        cell.font = header_font
+        cell.fill = header_fill
+        cell.alignment = header_align
+        cell.border = border
+        col_idx += 1
+    
+    cell = worksheet.cell(row=row_num, column=col_idx)
+    worksheet.merge_cells(start_row=row_num, start_column=col_idx, end_row=row_num+1, end_column=col_idx)
+    cell.value = '팀원'
+    cell.font = header_font
+    cell.fill = header_fill
+    cell.alignment = header_align
+    cell.border = border
+    col_idx += 1
+    
+    cell = worksheet.cell(row=row_num, column=col_idx)
+    worksheet.merge_cells(start_row=row_num, start_column=col_idx, end_row=row_num, end_column=col_idx+6)
+    cell.value = '시간대별 주간 평균통화량'
+    cell.font = header_font
+    cell.fill = header_fill
+    cell.alignment = header_align
+    cell.border = border
+    
+    # 두번째 행
+    col_idx = 2
+    row_num+=1
+
+    cell = worksheet.cell(row=row_num, column=col_idx)
+    cell.value = '집중시간'
+    cell.font = header_font
+    cell.fill = header_fill
+    cell.alignment = header_align
+    cell.border = border
+    col_idx += 1
+    
+    cell = worksheet.cell(row=row_num, column=col_idx)
+    worksheet.merge_cells(start_row=row_num, start_column=col_idx, end_row=row_num, end_column=col_idx+1)
+    cell.value = '전전주'
+    cell.font = header_font
+    cell.fill = header_fill
+    cell.alignment = header_align
+    cell.border = border
+    col_idx+=2
+    
+    cell = worksheet.cell(row=row_num, column=col_idx)
+    worksheet.merge_cells(start_row=row_num, start_column=col_idx, end_row=row_num, end_column=col_idx+1)
+    cell.value = '전주'
+    cell.font = header_font
+    cell.fill = header_fill
+    cell.alignment = header_align
+    cell.border = border
+    col_idx+=3
+    
+    headers = ['10시 ~ 11시','11시 ~ 12시','1시 ~ 2시','2시 ~ 3시','3시 ~ 4시','4시 ~ 5시','5시 ~ 6시']
+    # 첫 번째 행의 헤더 설정
+    for sub_header in headers:
+        cell = worksheet.cell(row=row_num, column=col_idx)
+        cell.value = sub_header
+        cell.font = header_font
+        cell.fill = header_fill
+        cell.alignment = header_align
+        cell.border = border
+        col_idx += 1
+    
+    return row_num
+
+
+######################
+####### 세번째 헤더생성
+######################
+def create_excel_header3(worksheet, row_num):
     col_idx = 1
     
     cell = worksheet.cell(row=row_num, column=col_idx)
@@ -267,8 +397,40 @@ def export_to_excel(data, selected_names, company_list):
             cell.alignment = center_align
         row_num += 1
     
-
     row_num = create_excel_header2(ws, row_num+1)
+    row_num+=1
+    
+    for name in selected_names:
+        
+        if name in data:
+            # 각 팀원에 대한 데이터를 작성하기 위해 새로운 행을 추가합니다.
+            cell = ws.cell(row=row_num, column=1, value=name)
+            cell.alignment = center_align
+            
+            col_idx = 2
+            
+            cell = ws.cell(row=row_num, column=col_idx, value='없음')
+            cell.alignment = center_align
+            
+            cell = ws.cell(row=row_num, column=col_idx+1, value=data[name].get('b_last_call_count', 0))
+            cell.alignment = center_align
+            
+            cell = ws.cell(row=row_num, column=col_idx+2, value=data[name].get('b_last_avg_call_duration', '00:00:00'))
+            cell.alignment = center_align
+            
+            cell = ws.cell(row=row_num, column=col_idx+3, value=data[name].get('last_call_count', 0))
+            cell.alignment = center_align
+            
+            cell = ws.cell(row=row_num, column=col_idx+4, value=data[name].get('last_avg_call_duration', '00:00:00'))
+            cell.alignment = center_align
+            
+            cell = ws.cell(row=row_num, column=col_idx+5, value=name)
+            cell.alignment = center_align
+            
+            row_num += 1
+    
+
+    row_num = create_excel_header3(ws, row_num+1)
     row_num+=1
     
     for name in selected_names:
@@ -283,7 +445,7 @@ def export_to_excel(data, selected_names, company_list):
             cell = ws.cell(row=row_num, column=col_idx, value=data[name].get('previous_month_sales', 0))
             cell.alignment = center_align
             
-            cell = ws.cell(row=row_num, column=col_idx+1, value=data[name].get('last_week_total', 0))
+            cell = ws.cell(row=row_num, column=col_idx+1, value=data[name].get('current_month_sales', 0))
             cell.alignment = center_align
             
             cell = ws.cell(row=row_num, column=col_idx+2, value=data[name].get('estimated_sales', 0))
@@ -324,156 +486,16 @@ def export_to_excel(data, selected_names, company_list):
 ##########################
 
 def sales_report(request):
-    today = datetime.now().date()
     
     teams = T_DEPTS.objects.all()
     members = T_USERS.objects.all()
     
-    team_code = request.GET.get('team_code')
-    member_code = request.GET.get('member_code')
-    export_excel = request.GET.get('export_excel') == 'true'
-    selectedDate = request.GET.get('selectedDate')
     
-    if selectedDate:
-        ref_date = datetime.strptime(selectedDate, '%Y-%m-%d').date()
-        today = ref_date
-    else:
-        today = datetime.now().date()
-    
-    if team_code or member_code:
-        if team_code and member_code:
-            members = T_USERS.objects.filter(username=member_code)
-        elif team_code: 
-            members = T_USERS.objects.filter(dept_code=team_code)
-        else:
-            members = T_USERS.objects.filter(username=member_code)
-        
-        selected_names = [m.username for m in members]
-
-        data = {}
-
-        for n in selected_names:
-            data[n] = {}
-
-        # 현재 날짜를 기준으로 전주와 전전주 날짜를 계산합니다.
-        last_week_start, last_week_end = get_previous_week_dates(today - timedelta(weeks=1))
-        week_before_last_start, week_before_last_end = get_previous_week_dates(today - timedelta(weeks=2))
-
-        # 현재 날짜를 기준으로 전월달 과 현재까지를 계산합니다.
-        previous_month_start, previous_month_end = get_previous_month_range(today)
-        current_month_start = today.replace(day=1)
-
-        # 모든 관련 데이터를 한 번에 조회합니다.
-        last_week_data = T_Sales_Day.objects.filter(
-            media_id__in=company,
-            mkt_nm__in=selected_names,
-            sale_date__range=[last_week_start, last_week_end]
-        ).values('media_id', 'mkt_nm').annotate(total=Sum('tot_amt'))
-
-        week_before_last_data = T_Sales_Day.objects.filter(
-            media_id__in=company,
-            mkt_nm__in=selected_names,
-            sale_date__range=[week_before_last_start, week_before_last_end]
-        ).values('media_id', 'mkt_nm').annotate(total=Sum('tot_amt'))
-
-        # 데이터를 파싱하여 처리합니다.
-        last_week_totals = { (d['media_id'], d['mkt_nm']): d['total'] for d in last_week_data }
-        week_before_last_totals = { (d['media_id'], d['mkt_nm']): d['total'] for d in week_before_last_data }
-
-        for name in selected_names:
-            for com in company:
-                last_week_total = last_week_totals.get((com, name), 0)
-                week_before_last_total = week_before_last_totals.get((com, name), 0)
-                growth_rate = calculate_growth(last_week_total, week_before_last_total)
-                # 결과 저장
-                data[name][com] = {
-                    'last_week_total': round(last_week_total),
-                    'week_before_last_total': round(week_before_last_total),
-                    'growth_rate': round(growth_rate)
-                }
-                        
-            ###### ###### ###### ###### ###### 
-            ###### 신규, 이관을 계산합니다 ######
-            ###### ###### ###### ###### ######  
-            
-            new = T_TRANSFER.objects.filter(
-                mkt_nm=name,
-                trns_gbn=1
-            ).count()
-            
-            escalation = T_TRANSFER.objects.filter(
-                mkt_nm=name,
-                trns_gbn = 2
-            ).count()
-            
-            data[name]['new'] = new
-            data[name]['escalation'] = escalation    
-                
-                
-            ###### ###### ###### ###### ###### ######
-            ###### 전매체 Live 계정수를 계산합니다 ######
-            ###### ###### ###### ###### ###### ######    
-
-            # 전전주 Live 계정수
-            before_last_live = T_Sales_Day.objects.filter(
-                mkt_nm=name,
-                tot_amt__gt=0,  # tot_amt가 0보다 큰 조건 추가
-                sale_date__range=[week_before_last_start, week_before_last_end]
-            ).count()  # 객체의 개수를 세는 메소드 사용
-
-            # 전주 Live 계정수
-            last_live = T_Sales_Day.objects.filter(
-                mkt_nm=name,
-                tot_amt__gt=0,  # tot_amt가 0보다 큰 조건 추가
-                sale_date__range=[last_week_start, last_week_end]
-            ).count()  # 객체의 개수를 세는 메소드 사용s
-            
-            increase = last_live-before_last_live
-            
-            data[name]['before_last_live'] = before_last_live
-            data[name]['last_live'] = last_live
-            data[name]['increase'] = increase
-
-            ############# ###### ###### ###### ########
-            # 전월매출, 당월누적매출, 예상매출, 예상증감 # 
-            ###### ###### ###### ###### ###### ###### #
-            
-            # 전월 매출 
-            previous_month_sales = round(T_Sales_Day.objects.filter(
-                    mkt_nm=name,
-                sale_date__range=[previous_month_start, previous_month_end]
-                ).aggregate(total=Sum('tot_amt'))['total'] or 0)
-
-            # 당월 누적 매출
-            current_month_sales = round(T_Sales_Day.objects.filter(
-                mkt_nm=name,
-                sale_date__range=[current_month_start, today]
-            ).aggregate(total=Sum('tot_amt'))['total'] or 0)
-
-            # 예상 매출 계산 (단순화된 예상치 계산)
-            estimated_sales = round((current_month_sales / today.day) * 30 if today.day != 0 else 0
-    )
-            # 예상 증감
-            estimated_growth = round(estimated_sales - previous_month_sales)
-            
-            data[name]['previous_month_sales'] = previous_month_sales
-            data[name]['current_month_sales'] = current_month_sales
-            data[name]['estimated_sales'] = estimated_sales
-            data[name]['estimated_growth'] = estimated_growth
-            
-        if export_excel:
-            file_url = export_to_excel(data, selected_names, company)
-            full_url = request.build_absolute_uri(file_url)  # 완전한 URL 생성
-            return JsonResponse({'url': full_url})
-        
-        return render(request, 'search/search.html', {
-            'teams': teams,
-        'members': members,
-        })
     return render(request, 'search/search.html', {
             'teams': teams,
         'members': members,
         })
+    
 ##############
 # 비동기 처리 #
 ############################### 1번 서버 #####################################
@@ -481,6 +503,8 @@ def fetch_team_data(request):
     team_code = request.GET.get('team_code')
     member_code = request.GET.get('member_code')
     ref_date_str = request.GET.get('ref_date')
+    export_excel = request.GET.get('export_excel') == 'true'
+    
     # 문자열을 datetime.date 객체로 변환
     
     if ref_date_str:
@@ -507,7 +531,18 @@ def fetch_team_data(request):
             company_list[com] = 0
     
     data = data_process(names,today)
+
+    user_data = {}
+    for user in names:
+        res = T_USERS.objects.get(username=user)
+        user_data[res.uphone] = res.username
+
+    data = calculate_weekly_call_data(data, today, user_data)
     
+    if export_excel:
+        file_url = export_to_excel(data, names, company)
+        full_url = request.build_absolute_uri(file_url)  # 완전한 URL 생성
+        return JsonResponse({'url': full_url})
     return JsonResponse({'members': data, 'selected' : names, 'company': company_list}, safe=False)
 
 ############################### 1번 서버 후처리 ###############################
@@ -632,5 +667,4 @@ def data_process(members, today):
         data[name]['current_month_sales'] = current_month_sales
         data[name]['estimated_sales'] = estimated_sales
         data[name]['estimated_growth'] = estimated_growth
-   
     return data

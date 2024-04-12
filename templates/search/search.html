@@ -143,8 +143,39 @@
 </div>
 <br>
 
-</div>
+<div class="row justify-content-center mx-3 text-center">
 
+    <table class="table table-hover table-bordered scrollable-table tb" id='team-members-table3'>
+        <thead class='table-dark tb'>
+            <tr>
+                <th rowspan="2" scope="col" class="vertical-align-middle">팀원</th>
+                <th scope="col">업무 </th>
+                <th scope="col" >평균콜수 </th>
+                <th scope="col" >평균콜시간 </th>
+                <th scope="col" >평균콜수 </th>
+                <th scope="col" >평균콜시간 </th>
+                <th rowspan="2" scope="col" class="vertical-align-middle">팀원 </th>
+                <th colspan="7" scope="col">시간대별 주간 평균통화량 </th>
+            </tr>
+            <tr>
+                <th scope="col">집중시간</th>
+                <th colspan ='2' scope="col">전전주 </th>
+                <th colspan ='2' scope="col">전주 </th>
+                <th scope="col">10시 ~ 11시</th>
+                <th scope="col">11시 ~ 12시</th>
+                <th scope="col">1시 ~ 2시</th>
+                <th scope="col">2시 ~ 3시</th>
+                <th scope="col">3시 ~ 4시</th>
+                <th scope="col">4시 ~ 5시</th>
+                <th scope="col">5시 ~ 6시</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+        </tbody>
+    </table>
+
+</div>
+<br>
 
 <div class="row justify-content-center mx-3 text-center">
 
@@ -311,16 +342,21 @@
     function updateTable(data) {
         var $table = $('#team-members-table tbody');
         var $table2 = $('#team-members-table2 tbody');
+        var $table3 = $('#team-members-table3 tbody');
     
         
         $table.empty(); // 테이블 내용 비우기
         $table2.empty(); // 테이블 내용 비우기
+        $table3.empty(); // 테이블 내용 비우기
     
         for(member in data.members) {
             var row = '<tr>'
             var row2 = '<tr>'
+            var row3 = '<tr>'
+
             row += '<th scope="row">' + member + '</th>'
             row2 += '<th scope="row">' + member + '</th>'
+            row3 += '<th scope="row">' + member + '</th>'
     
             for (com in data.company){
                 row += '<td>' + data.members[member][com].week_before_last_total + '</td>';
@@ -340,11 +376,49 @@
             row2 += '<td>' + data.members[member].estimated_sales + '</td>';
             row2 += '<td>' + data.members[member].estimated_growth + '</td>';
             row2 += '<td>' + '</td>' + '<td>' + '</td>' + '<td>' + '</td>' ;
-    
             row2 += '</tr>';
     
+            row3 += '<td>' + '없음' + '</td>';
+
+            
+            if (data.members[member].b_last_call_count === undefined) {
+                row3 += '<td>' + '0' + '</td>';
+            }else{
+                row3 += '<td>' + data.members[member].b_last_call_count + '</td>';
+
+            }
+
+            if (data.members[member].b_last_avg_call_duration === undefined) {
+                row3 += '<td>' + '00:00:00' + '</td>';
+            }else{
+                row3 += '<td>' + data.members[member].b_last_avg_call_duration + '</td>';
+            }
+
+            if (data.members[member].last_call_count === undefined) {
+                row3 += '<td>' + '0' + '</td>';
+            }else{
+                row3 += '<td>' + data.members[member].last_call_count + '</td>';
+
+            }
+
+            if (data.members[member].last_avg_call_duration === undefined) {
+                row3 += '<td>' + '00:00:00' + '</td>';
+            }else{
+                row3 += '<td>' + data.members[member].last_avg_call_duration + '</td>';
+            }
+            
+            row3 += '<td>' + member + '</td>';
+            row3 += '<td>' + '</td>';
+            row3 += '<td>' + '</td>';
+            row3 += '<td>' + '</td>';
+            row3 += '<td>' + '</td>';
+            row3 += '<td>' + '</td>';
+            row3 += '<td>' + '</td>';
+            row3 += '<td>' + '</td>';
+
             $table.append(row);
             $table2.append(row2);
+            $table3.append(row3);
     
         }
     }
@@ -362,11 +436,11 @@
         }
 
         // 엑셀 다운로드 요청 URL 생성
-        var url = '{% url "sales_report" %}';
+        var url = '{% url "fetch_team_data" %}';
         if (selectedDate) {
             var params = {
                 export_excel: true,
-                selectedDate : selectedDate,
+                ref_date : selectedDate,
             };
         } else {
             var params = {
@@ -385,7 +459,7 @@
     
         // 파일 다운로드 요청
         $.ajax({
-            url: '{% url "sales_report" %}',  // Django URLconf에 해당 경로 추가 필요
+            url: '{% url "fetch_team_data" %}',  // Django URLconf에 해당 경로 추가 필요
             data: params,
             dataType: 'json',
             success: function(response) {

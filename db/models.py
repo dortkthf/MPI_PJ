@@ -114,3 +114,21 @@ class T_DEPTS(models.Model):
     reg_ip = models.CharField(max_length=50, null=True, blank=True)
     upd_ip = models.CharField(max_length=50, null=True, blank=True)
     del_ip = models.CharField(max_length=50, null=True, blank=True)
+    
+class T_CALL_DAY_LIST(models.Model):
+    call_id = models.CharField(max_length=100, primary_key=True)
+    sender = models.CharField(max_length=50,null=True )  # send 필드는 보내는 사람을 의미하는 것으로 추정됩니다.
+    receiver = models.CharField(max_length=50,null=True )  # recv 필드는 받는 사람을 의미하는 것으로 추정됩니다.
+    call_date = models.DateTimeField(null=True )  # call_date 필드에는 날짜와 시간 정보가 포함되어 있습니다.
+    call_duration = models.TimeField(null=True )  # call_time 필드는 통화 시간을 나타내므로 TimeField를 사용합니다.
+    time_to_sec = models.IntegerField(null=True)  # timeToSec 필드는 정수 값을 가지므로 IntegerField를 사용합니다.
+    
+class T_NETSALES(models.Model):
+    sale_id = models.CharField(max_length=50, primary_key=True)
+    sale_month = models.CharField(max_length=6)  # 보통 연월은 6자리 숫자로 표현됩니다.
+    mkt_name = models.CharField(max_length=100)
+    tot_amt = models.BigIntegerField()  # 큰 금액을 다룰 수 있게 BigIntegerField를 사용합니다.
+    next_rate = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    next_amt = models.BigIntegerField(null=True, blank=True)
+    target_time = models.IntegerField(null=True, blank=True)
+    target_call = models.IntegerField(null=True, blank=True)

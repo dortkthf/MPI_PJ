@@ -7,6 +7,5 @@ from .views import *
 urlpatterns = [
 	path('', views.sales_report, name ='sales_report'),    
 	path('fetch_team_data/', fetch_team_data, name='fetch_team_data'),
-	# path('fetch_team_data2/', fetch_team_data2, name='fetch_team_data2'),
  
 ]
