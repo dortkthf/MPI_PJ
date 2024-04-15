@@ -1,9 +1,8 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from db.models import *
 from django.http import HttpResponse, HttpResponseNotAllowed, JsonResponse
 from django.db.models import Sum,Q, Avg, Count
 from django.utils import timezone
-from django.utils.timezone import make_aware
 import pandas as pd
 from io import BytesIO
 from datetime import datetime, timedelta, date
@@ -31,8 +30,6 @@ data = {}
 for n in names:
     data[n] = {}
 
-def e404(request):
-    return render(request, 'search/e404.html',)
 
 def get_previous_week_dates(reference_date):
     start_of_week = reference_date - timedelta(days=reference_date.weekday())  # 주의 시작 (월요일)
@@ -90,10 +87,13 @@ def calculate_weekly_call_data(data, today, user_data):
 
     for call in last_week_avg_data:
         data[user_data[call['sender']]]['last_avg_call_duration'] = seconds_to_hms(call['avg_call_duration'])
-        data[user_data[call['sender']]]['last_call_count'] = round(call['call_count']/7,1)
+        data[user_data[call['sender']]]['last_call_count'] = call['call_count']
     for call in week_before_last_avg_data:
         data[user_data[call['sender']]]['b_last_avg_call_duration'] = seconds_to_hms(call['avg_call_duration'])
-        data[user_data[call['sender']]]['b_last_call_count'] = round(call['call_count']/7,1)
+        data[user_data[call['sender']]]['b_last_call_count'] = call['call_count']
+    
+    for d in user_data:
+        print(data[user_data[d]],'\n')
         
     return data
 
@@ -109,26 +109,17 @@ center_align = Alignment(horizontal='center', vertical='center')
 ####### 첫번째 헤더생성
 ######################
 def create_excel_header(worksheet, company_list):
-    # 메인 글씨 작성
-    cell = worksheet.cell(row=1, column=1)
-    worksheet.merge_cells(start_row=1, start_column=1, end_row=2, end_column=21)
-    cell.value = '주간 업무 미팅 자료'
-    cell.font = Font(name='Calibri', size=16, bold=True)
-    cell.alignment = header_align
-    cell.border = border
-    
-    
     # 첫 번째 행의 헤더 설정
-    worksheet['A4'] = '매체'
-    worksheet['A4'].font = header_font
-    worksheet['A4'].fill = header_fill
-    worksheet['A4'].alignment = header_align
-    worksheet['A4'].border = border
+    worksheet['A1'] = '매체'
+    worksheet['A1'].font = header_font
+    worksheet['A1'].fill = header_fill
+    worksheet['A1'].alignment = header_align
+    worksheet['A1'].border = border
     col_idx = 2  # B열에서 시작
     
     for company in change:
-        cell = worksheet.cell(row=4, column=col_idx)
-        worksheet.merge_cells(start_row=4, start_column=col_idx, end_row=4, end_column=col_idx+2)
+        cell = worksheet.cell(row=1, column=col_idx)
+        worksheet.merge_cells(start_row=1, start_column=col_idx, end_row=1, end_column=col_idx+2)
         cell.value = company
         cell.font = header_font
         cell.fill = header_fill
@@ -137,8 +128,8 @@ def create_excel_header(worksheet, company_list):
         col_idx += 3
         
     # '맵핑수(누적)'과 '전매체 Live 계정수' 헤더 설정
-    cell = worksheet.cell(row=4, column=col_idx)
-    worksheet.merge_cells(start_row=4, start_column=col_idx, end_row=4, end_column=col_idx+1)
+    cell = worksheet.cell(row=1, column=col_idx)
+    worksheet.merge_cells(start_row=1, start_column=col_idx, end_row=1, end_column=col_idx+1)
     cell.value = '맵핑수(누적)'
     cell.font = header_font
     cell.fill = header_fill
@@ -146,8 +137,8 @@ def create_excel_header(worksheet, company_list):
     cell.border = border
     col_idx += 2
 
-    cell = worksheet.cell(row=4, column=col_idx)
-    worksheet.merge_cells(start_row=4, start_column=col_idx, end_row=4, end_column=col_idx+2)
+    cell = worksheet.cell(row=1, column=col_idx)
+    worksheet.merge_cells(start_row=1, start_column=col_idx, end_row=1, end_column=col_idx+2)
     cell.value = '전매체 Live 계정수'
     cell.font = header_font
     cell.fill = header_fill
@@ -157,18 +148,18 @@ def create_excel_header(worksheet, company_list):
 
     # 두 번째 행의 헤더 설정
     
-    worksheet['A5'] = '팀원'
-    worksheet['A5'].font = header_font
-    worksheet['A5'].fill = header_fill
-    worksheet['A5'].alignment = header_align
-    worksheet['A5'].border = border
+    worksheet['A2'] = '팀원'
+    worksheet['A2'].font = header_font
+    worksheet['A2'].fill = header_fill
+    worksheet['A2'].alignment = header_align
+    worksheet['A2'].border = border
 
     col_idx = 2  # B열에서 시작
     
     sub_headers = ['전전주매출', '전주매출', '성장률']
     for _ in company_list:
         for sub_header in sub_headers:
-            cell = worksheet.cell(row=5, column=col_idx)
+            cell = worksheet.cell(row=2, column=col_idx)
             cell.value = sub_header
             cell.font = header_font
             cell.fill = header_fill
@@ -178,7 +169,7 @@ def create_excel_header(worksheet, company_list):
 
     
     # '맵핑수(누적)' 밑에 '신규', '이관' 설정
-    cell = worksheet.cell(row=5, column=col_idx)
+    cell = worksheet.cell(row=2, column=col_idx)
     cell.value = '신규'
     cell.font = header_font
     cell.fill = header_fill
@@ -186,7 +177,7 @@ def create_excel_header(worksheet, company_list):
     cell.border = border
     col_idx += 1
     
-    cell = worksheet.cell(row=5, column=col_idx)
+    cell = worksheet.cell(row=2, column=col_idx)
     cell.value = '이관'
     cell.font = header_font
     cell.fill = header_fill
@@ -198,7 +189,7 @@ def create_excel_header(worksheet, company_list):
     # '전매체 Live 계정수' 밑에 '전전주', '전주', '증감' 설정
     sub_headers = ['전전주', '전주', '증감']
     for sub_header in sub_headers:
-        cell = worksheet.cell(row=5, column=col_idx)
+        cell = worksheet.cell(row=2, column=col_idx)
         cell.value = sub_header
         cell.font = header_font
         cell.fill = header_fill
@@ -365,14 +356,13 @@ def export_to_excel(data, selected_names, company_list):
     wb = Workbook()
     ws = wb.active
     ws.title = "Sales Data"
-    filename = ''
+
     # 엑셀 헤더 생성
     create_excel_header(ws, company_list)
     
     # 데이터 쓰기
-    row_num = 6
+    row_num = 3
     for name in selected_names:
-        filename += name + '_'
         if name in data:
             cell = ws.cell(row=row_num, column=1, value=name)
             cell.alignment = center_align
@@ -419,7 +409,7 @@ def export_to_excel(data, selected_names, company_list):
             
             col_idx = 2
             
-            cell = ws.cell(row=row_num, column=col_idx, value=data[name].get('focus'))
+            cell = ws.cell(row=row_num, column=col_idx, value='없음')
             cell.alignment = center_align
             
             cell = ws.cell(row=row_num, column=col_idx+1, value=data[name].get('b_last_call_count', 0))
@@ -483,7 +473,7 @@ def export_to_excel(data, selected_names, company_list):
         ws.column_dimensions[get_column_letter(column[0].column)].width = adjusted_width
     
     # 버퍼를 통해 파일 저장
-    filename += ".xlsx"
+    filename = "sales_report.xlsx"
     file_path = os.path.join(settings.MEDIA_ROOT, filename)
     wb.save(file_path)
 
@@ -496,42 +486,15 @@ def export_to_excel(data, selected_names, company_list):
 ##########################
 
 def sales_report(request):
-    mpid = request.GET.get('mpid', None)  # URL에서 mpid를 가져옵니다.
-    session = request.session.get('mpid')
     
-    if mpid:
-        if session:
-            if mpid != session:
-                return redirect('e404')
-        else:
-            request.session['mpid'] = mpid
+    teams = T_DEPTS.objects.all()
+    members = T_USERS.objects.all()
     
-    is_manager = mpid in {'mp001', 'mp003', 'mp008', 'mp8826', 'mp777', 'ceo', 'mp015', 'mp027', 'mp010'}
-    xgroup =  ["경영지원팀", "기술지원팀", "퇴사자", "외부", "대대행"]
-    if not mpid:
-        return redirect('http://work.mymp.co.kr/mng/login/login.php')
-    try:
-        if is_manager:
-            teams = T_DEPTS.objects.all()  # 관리자는 모든 팀 정보를 볼 수 있습니다.
-            members = T_USERS.objects.all()  # 관리자는 모든 멤버 정보를 볼 수 있습니다.
-            select = False
-            user_dept_code = None
-
-        else:
-            dept_code = T_USERS.objects.get(userid=mpid).dept_code
-            teams = T_DEPTS.objects.filter(dept_code=dept_code)  # 팀장은 자신의 팀만 조회합니다.
-            members = T_USERS.objects.filter(dept_code__in=teams)  # 해당 팀 코드에 속하는 사용자들만 조회합니다.
-            select = True
-            user_dept_code = dept_code 
-    except:
-        return redirect('e404/')
+    
     return render(request, 'search/search.html', {
-        'teams': teams,
+            'teams': teams,
         'members': members,
-        'select' : select,
-        'user_dept_code': user_dept_code,
-        'xgroup' : xgroup,
-    })
+        })
     
 ##############
 # 비동기 처리 #
@@ -601,7 +564,6 @@ def data_process(members, today):
     previous_month_start, previous_month_end = get_previous_month_range(today)
     current_month_start = today.replace(day=1)
 
-
     # 모든 관련 데이터를 한 번에 조회합니다.
     last_week_data = T_Sales_Day.objects.filter(
         media_id__in=company,
@@ -619,31 +581,7 @@ def data_process(members, today):
     last_week_totals = { (d['media_id'], d['mkt_nm']): d['total'] for d in last_week_data }
     week_before_last_totals = { (d['media_id'], d['mkt_nm']): d['total'] for d in week_before_last_data }
 
-    # 지난 달과 현재까지의 데이터를 조회합니다.
-    last_month_data = T_NETSALES.objects.filter(
-        sale_month__gte=previous_month_start.strftime('%Y%m'),
-        sale_month__lte=previous_month_end.strftime('%Y%m'),
-        mkt_name__in=members
-    ).values('mkt_name').annotate(total=Sum('tot_amt'))
 
-    # 각 이름별로 데이터 처리
-    for name in members:
-        data[name] = {}
-
-        # 전월 매출에 따른 집중 시간 설정
-        last_month_total = next((item['total'] for item in last_month_data if item['mkt_name'] == name), 0)
-        if 1000000 <= last_month_total < 4000000:
-            focus = '2시간'
-        elif 4000000 <= last_month_total < 8000000:
-            focus = '1시간'
-        elif 8000000 <= last_month_total < 10000000:
-            focus = '30분'
-        else:
-            focus = '0분'
-        
-        data[name]['focus'] = focus
- 
-        
     for name in selected_names:
         for com in company:
             last_week_total = last_week_totals.get((com, name), 0)

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    /* Inline style if you prefer */
+    .sticky-header th {
+        position: sticky;
+        top: 0;
+        background-color: #000;
+        color: #fff;
+    }
+
+    .scrollable-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+        width: 1700px;
+        height: 400px;
+    }
+
+    .vertical-align-middle {
+        vertical-align: middle;
+    }
+
+    .tb {
+        position: sticky;
+        top: 0;
+    }
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h1 class="mb-4">접근 권한이 없습니다</h1>
+            <p class="lead">해당 페이지에 접근할 수 있는 권한이 없습니다. 추가 정보가 필요하면 시스템 관리자에게 문의하십시오.</p>
+            <a href="http://work.mymp.co.kr/mng/login/login.php" class="btn btn-primary mt-3">메인 페이지로 돌아가기</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

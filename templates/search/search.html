@@ -40,7 +40,9 @@
             <select id="team-select" class='form-select form-select-lg'>
                 <option value="">팀선택</option>
                 {% for team in teams %}
-                <option value="{{ team.dept_code }}">{{ team.dept_name }}</option>
+                {% if team.dept_name not in xgroup %}
+                <option value="{{ team.dept_code }}" {% if team.dept_code == user_dept_code %} selected {% endif %}>{{ team.dept_name }}</option>
+                {% endif %}
                 {% endfor %}
             </select>
         </div>
@@ -378,7 +380,7 @@
             row2 += '<td>' + '</td>' + '<td>' + '</td>' + '<td>' + '</td>' ;
             row2 += '</tr>';
     
-            row3 += '<td>' + '없음' + '</td>';
+            row3 += '<td>' + data.members[member].focus + '</td>';
 
             
             if (data.members[member].b_last_call_count === undefined) {
