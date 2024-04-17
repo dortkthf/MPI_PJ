@@ -1,4 +1,5 @@
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from db.models import *
 from django.http import HttpResponse, HttpResponseNotAllowed, JsonResponse
 from django.db.models import Sum,Q, Avg, Count
@@ -14,9 +15,10 @@ from openpyxl.styles import Alignment, Font, PatternFill, Border, Side
 
 import os
 from django.conf import settings
+from django.db.models.functions import ExtractHour
 
 names = []
-
+time_ranges = [(10, 11), (11, 12), (13, 14), (14, 15), (15, 16), (16, 17), (17, 18)]
 
 
 for u in T_USERS.objects.all():
@@ -66,10 +68,11 @@ def seconds_to_hms(seconds):
     # 포매팅된 문자열 반환
     return f"{hours:02}:{minutes:02}:{seconds:02}"
 
-def calculate_weekly_call_data(data, today, user_data):
+def calculate_weekly_call_data(data, today, user_data, names):
     last_week_start, last_week_end = get_previous_week_dates(today - timedelta(weeks=1))
     week_before_last_start, week_before_last_end = get_previous_week_dates(today - timedelta(weeks=2))
-
+    
+    
     # 전주 평균 콜 시간과 콜 수
     last_week_avg_data = T_CALL_DAY_LIST.objects.filter(
         call_date__range=[last_week_start, last_week_end],
@@ -89,12 +92,38 @@ def calculate_weekly_call_data(data, today, user_data):
     )
 
     for call in last_week_avg_data:
-        data[user_data[call['sender']]]['last_avg_call_duration'] = seconds_to_hms(call['avg_call_duration'])
+        data[user_data[call['sender']]]['last_avg_call_duration'] = seconds_to_hms(call['avg_call_duration']) if call['avg_call_duration'] else seconds_to_hms(0)
         data[user_data[call['sender']]]['last_call_count'] = round(call['call_count']/7,1)
     for call in week_before_last_avg_data:
-        data[user_data[call['sender']]]['b_last_avg_call_duration'] = seconds_to_hms(call['avg_call_duration'])
+        data[user_data[call['sender']]]['b_last_avg_call_duration'] = seconds_to_hms(call['avg_call_duration']) if call['avg_call_duration'] else seconds_to_hms(0)
         data[user_data[call['sender']]]['b_last_call_count'] = round(call['call_count']/7,1)
-        
+    
+    # 전주 데이터
+    base_query = T_CALL_DAY_LIST.objects.filter(
+        call_date__range=[last_week_start, last_week_end],
+        sender__in=user_data.keys()
+    ).annotate(
+        hour=ExtractHour('call_date')  # 시간 추출
+    )
+    
+    for sender in user_data.keys():
+        sender_data = base_query.filter(sender=sender)
+        for start, end in time_ranges:
+            avg_data = sender_data.filter(
+                hour__gte=start,
+                hour__lt=end
+            ).aggregate(
+                avg_call_duration=Avg('call_duration')
+            )
+            
+            avg_duration = avg_data['avg_call_duration']
+            if avg_duration is None:
+                avg_duration = "00:00:00"  # 적절한 기본값 설정
+            else:
+                avg_duration = seconds_to_hms(avg_duration)
+
+            # 결과 저장
+            data[user_data[sender]][f'_{start}{end}avg_duration'] = avg_duration
     return data
 
 # 엑셀파일 생성 및 다운로드
@@ -365,7 +394,8 @@ def export_to_excel(data, selected_names, company_list):
     wb = Workbook()
     ws = wb.active
     ws.title = "Sales Data"
-    filename = ''
+    today = datetime.now().date()
+    filename = str(today)
     # 엑셀 헤더 생성
     create_excel_header(ws, company_list)
     
@@ -411,33 +441,36 @@ def export_to_excel(data, selected_names, company_list):
     row_num+=1
     
     for name in selected_names:
+        # 각 팀원에 대한 데이터를 작성하기 위해 새로운 행을 추가합니다.
+        cell = ws.cell(row=row_num, column=1, value=name)
+        cell.alignment = center_align
         
-        if name in data:
-            # 각 팀원에 대한 데이터를 작성하기 위해 새로운 행을 추가합니다.
-            cell = ws.cell(row=row_num, column=1, value=name)
+        col_idx = 2
+        
+        cell = ws.cell(row=row_num, column=col_idx, value=data[name].get('focus'))
+        cell.alignment = center_align
+        
+        cell = ws.cell(row=row_num, column=col_idx+1, value=data[name].get('b_last_call_count', 0))
+        cell.alignment = center_align
+        
+        cell = ws.cell(row=row_num, column=col_idx+2, value=data[name].get('b_last_avg_call_duration', '00:00:00'))
+        cell.alignment = center_align
+        
+        cell = ws.cell(row=row_num, column=col_idx+3, value=data[name].get('last_call_count', 0))
+        cell.alignment = center_align
+        
+        cell = ws.cell(row=row_num, column=col_idx+4, value=data[name].get('last_avg_call_duration', '00:00:00'))
+        cell.alignment = center_align
+        
+        cell = ws.cell(row=row_num, column=col_idx+5, value=name)
+        cell.alignment = center_align
+        
+        for start,end in time_ranges:
+            cell = ws.cell(row=row_num, column=col_idx+6, value=data[name][f'_{start}{end}avg_duration'])
             cell.alignment = center_align
-            
-            col_idx = 2
-            
-            cell = ws.cell(row=row_num, column=col_idx, value=data[name].get('focus'))
-            cell.alignment = center_align
-            
-            cell = ws.cell(row=row_num, column=col_idx+1, value=data[name].get('b_last_call_count', 0))
-            cell.alignment = center_align
-            
-            cell = ws.cell(row=row_num, column=col_idx+2, value=data[name].get('b_last_avg_call_duration', '00:00:00'))
-            cell.alignment = center_align
-            
-            cell = ws.cell(row=row_num, column=col_idx+3, value=data[name].get('last_call_count', 0))
-            cell.alignment = center_align
-            
-            cell = ws.cell(row=row_num, column=col_idx+4, value=data[name].get('last_avg_call_duration', '00:00:00'))
-            cell.alignment = center_align
-            
-            cell = ws.cell(row=row_num, column=col_idx+5, value=name)
-            cell.alignment = center_align
-            
-            row_num += 1
+            col_idx +=1
+        
+        row_num += 1
     
 
     row_num = create_excel_header3(ws, row_num+1)
@@ -496,8 +529,11 @@ def export_to_excel(data, selected_names, company_list):
 ##########################
 
 def sales_report(request):
-    mpid = request.GET.get('mpid', None)  # URL에서 mpid를 가져옵니다.
+    mpid = request.GET.get('mpid')  # URL에서 mpid를 가져옵니다.
     session = request.session.get('mpid')
+
+    is_manager = session in {'mp001', 'mp003', 'mp008', 'mp8826', 'mp777', 'ceo', 'mp015', 'mp027', 'mp010'}
+    xgroup =  ["경영지원팀", "기술지원팀", "퇴사자", "외부", "대대행"]
     
     if mpid:
         if session:
@@ -505,26 +541,24 @@ def sales_report(request):
                 return redirect('e404')
         else:
             request.session['mpid'] = mpid
-    
-    is_manager = mpid in {'mp001', 'mp003', 'mp008', 'mp8826', 'mp777', 'ceo', 'mp015', 'mp027', 'mp010'}
-    xgroup =  ["경영지원팀", "기술지원팀", "퇴사자", "외부", "대대행"]
-    if not mpid:
-        return redirect('http://work.mymp.co.kr/mng/login/login.php')
-    try:
-        if is_manager:
-            teams = T_DEPTS.objects.all()  # 관리자는 모든 팀 정보를 볼 수 있습니다.
-            members = T_USERS.objects.all()  # 관리자는 모든 멤버 정보를 볼 수 있습니다.
-            select = False
-            user_dept_code = None
+            return redirect(reverse('sales_report'))
+    else:
+        if not session:
+            return redirect('e404')
+        
+    if is_manager:
+        teams = T_DEPTS.objects.all()  # 관리자는 모든 팀 정보를 볼 수 있습니다.
+        members = T_USERS.objects.all()  # 관리자는 모든 멤버 정보를 볼 수 있습니다.
+        select = False
+        user_dept_code = None
 
-        else:
-            dept_code = T_USERS.objects.get(userid=mpid).dept_code
-            teams = T_DEPTS.objects.filter(dept_code=dept_code)  # 팀장은 자신의 팀만 조회합니다.
-            members = T_USERS.objects.filter(dept_code__in=teams)  # 해당 팀 코드에 속하는 사용자들만 조회합니다.
-            select = True
-            user_dept_code = dept_code 
-    except:
-        return redirect('e404/')
+    else:
+        dept_code = T_USERS.objects.get(userid=session).dept_code
+        teams = T_DEPTS.objects.filter(dept_code=dept_code)  # 팀장은 자신의 팀만 조회합니다.
+        members = T_USERS.objects.filter(dept_code__in=teams)  # 해당 팀 코드에 속하는 사용자들만 조회합니다.
+        select = True
+        user_dept_code = dept_code 
+
     return render(request, 'search/search.html', {
         'teams': teams,
         'members': members,
@@ -549,7 +583,7 @@ def fetch_team_data(request):
         today = ref_date
     else:
         today = datetime.now().date()
-    
+
     names = []
     company_list = {}
     
@@ -568,13 +602,13 @@ def fetch_team_data(request):
             company_list[com] = 0
     
     data = data_process(names,today)
-
+    
     user_data = {}
     for user in names:
         res = T_USERS.objects.get(username=user)
         user_data[res.uphone] = res.username
-
-    data = calculate_weekly_call_data(data, today, user_data)
+    
+    data = calculate_weekly_call_data(data, today, user_data, names)
     
     if export_excel:
         file_url = export_to_excel(data, names, company)
@@ -587,10 +621,6 @@ def data_process(members, today):
     
     data = {}
     # 선택된 이름을 받아옵니다.
-    selected_names = members
-    
-    for n in selected_names:
-        data[n] = {}
     
     # 현재 날짜를 기준으로 전주와 전전주 날짜를 계산합니다.
     # 기준 날짜를 2023년 2월 5일로 설정
@@ -605,13 +635,13 @@ def data_process(members, today):
     # 모든 관련 데이터를 한 번에 조회합니다.
     last_week_data = T_Sales_Day.objects.filter(
         media_id__in=company,
-        mkt_nm__in=selected_names,
+        mkt_nm__in=members,
         sale_date__range=[last_week_start, last_week_end]
     ).values('media_id', 'mkt_nm').annotate(total=Sum('tot_amt'))
 
     week_before_last_data = T_Sales_Day.objects.filter(
         media_id__in=company,
-        mkt_nm__in=selected_names,
+        mkt_nm__in=members,
         sale_date__range=[week_before_last_start, week_before_last_end]
     ).values('media_id', 'mkt_nm').annotate(total=Sum('tot_amt'))
 
@@ -643,20 +673,6 @@ def data_process(members, today):
         
         data[name]['focus'] = focus
  
-        
-    for name in selected_names:
-        for com in company:
-            last_week_total = last_week_totals.get((com, name), 0)
-            week_before_last_total = week_before_last_totals.get((com, name), 0)
-            growth_rate = calculate_growth(last_week_total, week_before_last_total)
-            # 결과 저장
-            data[name][com] = {
-                'last_week_total': round(last_week_total),
-                'week_before_last_total': round(week_before_last_total),
-                'growth_rate': round(growth_rate)
-            }
-            
-                    
         #########################
         # 신규, 이관을 계산합니다 #
         #########################
@@ -729,4 +745,16 @@ def data_process(members, today):
         data[name]['current_month_sales'] = current_month_sales
         data[name]['estimated_sales'] = estimated_sales
         data[name]['estimated_growth'] = estimated_growth
+        
+        for com in company:
+            last_week_total = last_week_totals.get((com, name), 0)
+            week_before_last_total = week_before_last_totals.get((com, name), 0)
+            growth_rate = calculate_growth(last_week_total, week_before_last_total)
+            # 결과 저장
+            data[name][com] = {
+                'last_week_total': round(last_week_total),
+                'week_before_last_total': round(week_before_last_total),
+                'growth_rate': round(growth_rate)
+            }
+        
     return data
