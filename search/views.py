@@ -65,7 +65,7 @@ def calculate_growth(last_week_total, week_before_last_total):
 
   #########################################################
  # 초를 시 분 초 형식으로 00:00:00 로 표시하도록 만드는 함수 #
-#########################################################
+##########################################################
 def seconds_to_hms(seconds):
     # 반올림 처리
     seconds = round(seconds)
@@ -82,7 +82,6 @@ def seconds_to_hms(seconds):
 def calculate_weekly_call_data(data, today, user_data, names):
     last_week_start, last_week_end = get_previous_week_dates(today - timedelta(weeks=1))
     week_before_last_start, week_before_last_end = get_previous_week_dates(today - timedelta(weeks=2))
-    
     
     # 전주 평균 콜 시간과 콜 수
     last_week_avg_data = T_CALL_DAY_LIST.objects.filter(
@@ -650,22 +649,22 @@ def fetch_team_data(request):
         full_url = request.build_absolute_uri(file_url)  # 완전한 URL 생성
         return JsonResponse({'url': full_url})
     return JsonResponse({'members': data, 'selected' : names, 'company': company_list}, safe=False)
-
-# 데이터 처리하기
+  
+  ##################
+ # 데이터 처리하기 #
+##################
 def data_process(members, today):
     
     # 선택된 이름을 받아옵니다.
     data = {}
     
     # 현재 날짜를 기준으로 전주와 전전주 날짜를 계산합니다.
-    # 기준 날짜를 2023년 2월 5일로 설정
     last_week_start, last_week_end = get_previous_week_dates(today - timedelta(weeks=1))
     week_before_last_start, week_before_last_end = get_previous_week_dates(today - timedelta(weeks=2))
 
     # 현재 날짜를 기준으로 전월달 과 현재까지를 계산합니다.
     previous_month_start, previous_month_end = get_previous_month_range(today)
     current_month_start = today.replace(day=1)
-
 
     # 모든 관련 데이터를 한 번에 조회합니다.
     last_week_data = T_Sales_Day.objects.filter(
@@ -682,6 +681,7 @@ def data_process(members, today):
 
     # 데이터를 파싱하여 처리합니다.
     last_week_totals = { (d['media_id'], d['mkt_nm']): d['total'] for d in last_week_data }
+
     week_before_last_totals = { (d['media_id'], d['mkt_nm']): d['total'] for d in week_before_last_data }
 
     # 지난 달과 현재까지의 데이터를 조회합니다.
@@ -727,7 +727,6 @@ def data_process(members, today):
         data[name]['new'] = new
         data[name]['escalation'] = escalation    
             
-            
           #################################
          # 전매체 Live 계정수를 계산합니다 #
         #################################   
@@ -744,7 +743,7 @@ def data_process(members, today):
             mkt_nm=name,
             tot_amt__gt=0,  # tot_amt가 0보다 큰 조건 추가
             sale_date__range=[last_week_start, last_week_end]
-        ).count()  # 객체의 개수를 세는 메소드 사용s
+        ).count()  # 객체의 개수를 세는 메소드 사용
         
         # 증감
         increase = last_live-before_last_live
