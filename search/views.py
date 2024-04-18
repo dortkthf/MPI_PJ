@@ -1,25 +1,20 @@
+import os
+from django.conf import settings
+from django.db.models.functions import ExtractHour
+
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from db.models import *
-from django.http import HttpResponse, HttpResponseNotAllowed, JsonResponse
-from django.db.models import Sum,Q, Avg, Count
-from django.utils import timezone
-from django.utils.timezone import make_aware
-import pandas as pd
-from io import BytesIO
-from datetime import datetime, timedelta, date
+from django.http import JsonResponse
+from django.db.models import Sum, Avg, Count
+from datetime import datetime, timedelta
 
 from openpyxl.utils import get_column_letter
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font, PatternFill, Border, Side
 
-import os
-from django.conf import settings
-from django.db.models.functions import ExtractHour
-
 names = []
 time_ranges = [(10, 11), (11, 12), (13, 14), (14, 15), (15, 16), (16, 17), (17, 18)]
-
 
 for u in T_USERS.objects.all():
     names.append(u.username)
@@ -32,16 +27,24 @@ data = {}
 
 for n in names:
     data[n] = {}
-
+    
+  ###########
+ # 에러처리 #
+###########
 def e404(request):
     return render(request, 'search/e404.html',)
 
+  ##########################
+ #전주의 시작일, 끝일 구하기#
+##########################
 def get_previous_week_dates(reference_date):
     start_of_week = reference_date - timedelta(days=reference_date.weekday())  # 주의 시작 (월요일)
     end_of_week = start_of_week + timedelta(days=6)  # 주의 끝 (일요일)
     return start_of_week, end_of_week
 
-
+  ##########################
+ #전월의 시작일, 말일 구하기#
+##########################
 def get_previous_month_range(current_date):
     # 전월의 마지막 날을 구하기 위해 현재 월의 첫날에서 하루를 빼면 전월의 마지막 날이 됩니다.
     end_of_last_month = current_date.replace(day=1) - timedelta(days=1)
@@ -49,7 +52,9 @@ def get_previous_month_range(current_date):
     start_of_last_month = end_of_last_month.replace(day=1)
     return start_of_last_month, end_of_last_month
 
-
+  ##############################
+ #전전주 대비 전주 성장률 구하기#
+##############################
 def calculate_growth(last_week_total, week_before_last_total):
     if week_before_last_total == 0 and last_week_total != 0:
         return 100
@@ -58,6 +63,9 @@ def calculate_growth(last_week_total, week_before_last_total):
     else:
         return (last_week_total / week_before_last_total * 100)
 
+  #########################################################
+ # 초를 시 분 초 형식으로 00:00:00 로 표시하도록 만드는 함수 #
+#########################################################
 def seconds_to_hms(seconds):
     # 반올림 처리
     seconds = round(seconds)
@@ -68,6 +76,9 @@ def seconds_to_hms(seconds):
     # 포매팅된 문자열 반환
     return f"{hours:02}:{minutes:02}:{seconds:02}"
 
+  ###############################################################
+ # 전주, 전전주 평균콜수, 평균콜시간, 전주 시간대별 주간 평균통화량 #
+###############################################################
 def calculate_weekly_call_data(data, today, user_data, names):
     last_week_start, last_week_end = get_previous_week_dates(today - timedelta(weeks=1))
     week_before_last_start, week_before_last_end = get_previous_week_dates(today - timedelta(weeks=2))
@@ -98,7 +109,7 @@ def calculate_weekly_call_data(data, today, user_data, names):
         data[user_data[call['sender']]]['b_last_avg_call_duration'] = seconds_to_hms(call['avg_call_duration']) if call['avg_call_duration'] else seconds_to_hms(0)
         data[user_data[call['sender']]]['b_last_call_count'] = round(call['call_count']/7,1)
     
-    # 전주 데이터
+    # 전주 시간대별 주간 평균 통화량 계산
     base_query = T_CALL_DAY_LIST.objects.filter(
         call_date__range=[last_week_start, last_week_end],
         sender__in=user_data.keys()
@@ -126,19 +137,23 @@ def calculate_weekly_call_data(data, today, user_data, names):
             data[user_data[sender]][f'_{start}{end}avg_duration'] = avg_duration
     return data
 
-# 엑셀파일 생성 및 다운로드
-
+  #######################
+ # 엑셀생성시 기본설정값 #
+#######################
 header_font = Font(bold=True)
 header_fill = PatternFill(start_color="FFFF00", end_color="FFFF00", fill_type="solid")
 header_align = Alignment(horizontal="center", vertical="center", wrap_text=True)
 border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
 center_align = Alignment(horizontal='center', vertical='center')
 
-######################
-####### 첫번째 헤더생성
-######################
+  ##################
+ # 첫번째 헤더생성 #
+##################
 def create_excel_header(worksheet, company_list):
-    # 메인 글씨 작성
+    
+      #################
+     # 메인 글씨 작성 #
+    ################# 
     cell = worksheet.cell(row=1, column=1)
     worksheet.merge_cells(start_row=1, start_column=1, end_row=2, end_column=21)
     cell.value = '주간 업무 미팅 자료'
@@ -146,8 +161,9 @@ def create_excel_header(worksheet, company_list):
     cell.alignment = header_align
     cell.border = border
     
-    
-    # 첫 번째 행의 헤더 설정
+      ########################
+     # 첫 번째 행의 헤더 설정 #
+    ########################
     worksheet['A4'] = '매체'
     worksheet['A4'].font = header_font
     worksheet['A4'].fill = header_fill
@@ -155,6 +171,7 @@ def create_excel_header(worksheet, company_list):
     worksheet['A4'].border = border
     col_idx = 2  # B열에서 시작
     
+    # 매체 설정
     for company in change:
         cell = worksheet.cell(row=4, column=col_idx)
         worksheet.merge_cells(start_row=4, start_column=col_idx, end_row=4, end_column=col_idx+2)
@@ -185,7 +202,6 @@ def create_excel_header(worksheet, company_list):
     col_idx += 3
 
     # 두 번째 행의 헤더 설정
-    
     worksheet['A5'] = '팀원'
     worksheet['A5'].font = header_font
     worksheet['A5'].fill = header_fill
@@ -194,6 +210,7 @@ def create_excel_header(worksheet, company_list):
 
     col_idx = 2  # B열에서 시작
     
+    # 회사별 전전주매출, 전주매출, 성장률 설정
     sub_headers = ['전전주매출', '전주매출', '성장률']
     for _ in company_list:
         for sub_header in sub_headers:
@@ -235,9 +252,9 @@ def create_excel_header(worksheet, company_list):
         cell.border = border
         col_idx += 1
 
-######################
-####### 두번째 헤더생성
-######################
+  ##################
+ # 두번째 헤더생성 #
+##################
 def create_excel_header2(worksheet, row_num):
     col_idx = 1
     
@@ -322,9 +339,9 @@ def create_excel_header2(worksheet, row_num):
     return row_num
 
 
-######################
-####### 세번째 헤더생성
-######################
+  ##################
+ # 세번째 헤더생성 #
+##################
 def create_excel_header3(worksheet, row_num):
     col_idx = 1
     
@@ -389,17 +406,21 @@ def create_excel_header3(worksheet, row_num):
         col_idx += 1
     return row_num
 
+  ##########################
+ # 데이터를 엑셀로 출력하기 #
+##########################
 def export_to_excel(data, selected_names, company_list):
     # 엑셀 파일 생성을 위한 버퍼
     wb = Workbook()
     ws = wb.active
-    ws.title = "Sales Data"
+    ws.title = "주간 업무 미팅 자료"
     today = datetime.now().date()
     filename = str(today)
-    # 엑셀 헤더 생성
+    
+    # 첫번째 테이블 헤더 생성
     create_excel_header(ws, company_list)
     
-    # 데이터 쓰기
+    # 첫번째 테이블 데이터 쓰기
     row_num = 6
     for name in selected_names:
         filename += name + '_'
@@ -437,11 +458,12 @@ def export_to_excel(data, selected_names, company_list):
             cell.alignment = center_align
         row_num += 1
     
+    # 두번째 테이블 헤더 생성
     row_num = create_excel_header2(ws, row_num+1)
     row_num+=1
     
+    # 두번째 테이블 데이터 작성
     for name in selected_names:
-        # 각 팀원에 대한 데이터를 작성하기 위해 새로운 행을 추가합니다.
         cell = ws.cell(row=row_num, column=1, value=name)
         cell.alignment = center_align
         
@@ -466,16 +488,21 @@ def export_to_excel(data, selected_names, company_list):
         cell.alignment = center_align
         
         for start,end in time_ranges:
-            cell = ws.cell(row=row_num, column=col_idx+6, value=data[name][f'_{start}{end}avg_duration'])
+            if data[name].get(f'_{start}{end}avg_duration') == None:
+                res = '00:00:00'
+            else:
+                res = data[name].get(f'_{start}{end}avg_duration')
+            cell = ws.cell(row=row_num, column=col_idx+6, value=res)
             cell.alignment = center_align
             col_idx +=1
         
         row_num += 1
     
-
+    # 세번째 테이블 헤더 생성
     row_num = create_excel_header3(ws, row_num+1)
     row_num+=1
     
+    # 세번째 테이블 데이터 작성
     for name in selected_names:
         
         if name in data:
@@ -524,17 +551,20 @@ def export_to_excel(data, selected_names, company_list):
     file_url = settings.MEDIA_URL + filename
     return file_url
 
-##########################
-#### views.py 메인함수 ####
-##########################
-
+  ####################
+ # views.py 메인함수 #
+####################
 def sales_report(request):
+    
+    # mpid 로그인 아이디 가져와서 세션저장
     mpid = request.GET.get('mpid')  # URL에서 mpid를 가져옵니다.
     session = request.session.get('mpid')
 
+    # 관리자인지 아닌지 판단
     is_manager = session in {'mp001', 'mp003', 'mp008', 'mp8826', 'mp777', 'ceo', 'mp015', 'mp027', 'mp010'}
     xgroup =  ["경영지원팀", "기술지원팀", "퇴사자", "외부", "대대행"]
     
+    # mpid 에따른 분기처리 및 url 숨기기
     if mpid:
         if session:
             if mpid != session:
@@ -567,23 +597,25 @@ def sales_report(request):
         'xgroup' : xgroup,
     })
     
-##############
-# 비동기 처리 #
-############################### 1번 서버 #####################################
+  #######################
+ # 비동기 처리 메인함수  #
+########################
 def fetch_team_data(request):
+    
+    # 팀, 멤버 선택시 값 가져오기
     team_code = request.GET.get('team_code')
     member_code = request.GET.get('member_code')
     ref_date_str = request.GET.get('ref_date')
     export_excel = request.GET.get('export_excel') == 'true'
     
     # 문자열을 datetime.date 객체로 변환
-    
     if ref_date_str:
         ref_date = datetime.strptime(ref_date_str, '%Y-%m-%d').date()
         today = ref_date
     else:
         today = datetime.now().date()
 
+    # 팀 선택, 멤버 선택에 따른 조회할 유저 담기
     names = []
     company_list = {}
     
@@ -596,18 +628,21 @@ def fetch_team_data(request):
     else:
         members = T_USERS.objects.all()
     for m in members:
-            names.append(m.username)
+        names.append(m.username)
     
     for com in company:
-            company_list[com] = 0
+        company_list[com] = 0
     
+    # 조회할 유저 데이터 처리
     data = data_process(names,today)
     
+    # T_Call_Day 의 sender 값에 해당하는 유저 이름을 찾기위해 user_data 에 key, value 값에 uphone, username 으로 저장
     user_data = {}
     for user in names:
         res = T_USERS.objects.get(username=user)
         user_data[res.uphone] = res.username
-    
+        
+    # 전주, 전전주 평균콜수, 평균콜시간, 전주 시간대별 주간 평균통화량
     data = calculate_weekly_call_data(data, today, user_data, names)
     
     if export_excel:
@@ -616,11 +651,11 @@ def fetch_team_data(request):
         return JsonResponse({'url': full_url})
     return JsonResponse({'members': data, 'selected' : names, 'company': company_list}, safe=False)
 
-############################### 1번 서버 후처리 ###############################
+# 데이터 처리하기
 def data_process(members, today):
     
-    data = {}
     # 선택된 이름을 받아옵니다.
+    data = {}
     
     # 현재 날짜를 기준으로 전주와 전전주 날짜를 계산합니다.
     # 기준 날짜를 2023년 2월 5일로 설정
@@ -673,8 +708,8 @@ def data_process(members, today):
         
         data[name]['focus'] = focus
  
-        #########################
-        # 신규, 이관을 계산합니다 #
+          #########################
+         # 신규, 이관을 계산합니다 #
         #########################
         
         # 신규
@@ -693,8 +728,8 @@ def data_process(members, today):
         data[name]['escalation'] = escalation    
             
             
-        #################################
-        # 전매체 Live 계정수를 계산합니다 #
+          #################################
+         # 전매체 Live 계정수를 계산합니다 #
         #################################   
 
         # 전전주 Live 계정수
@@ -719,8 +754,8 @@ def data_process(members, today):
         data[name]['increase'] = increase
 
         
-        ###########################################
-        # 전월매출, 당월누적매출, 예상매출, 예상증감 #
+          ###########################################
+         # 전월매출, 당월누적매출, 예상매출, 예상증감 #
         ###########################################
         
         # 전월 매출 

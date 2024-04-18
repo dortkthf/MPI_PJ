@@ -410,13 +410,47 @@
             }
             
             row3 += '<td>' + member + '</td>';
-            row3 += '<td>' + data.members[member]._1011avg_duration + '</td>';
-            row3 += '<td>' + data.members[member]._1112avg_duration + '</td>';
-            row3 += '<td>' + data.members[member]._1314avg_duration + '</td>';
-            row3 += '<td>' + data.members[member]._1415avg_duration + '</td>';
-            row3 += '<td>' + data.members[member]._1516avg_duration + '</td>';
-            row3 += '<td>' + data.members[member]._1617avg_duration + '</td>';
-            row3 += '<td>' + data.members[member]._1718avg_duration + '</td>';
+            if (data.members[member]._1011avg_duration === undefined) {
+                row3 += '<td>' + '00:00:00' + '</td>';
+            }else {
+                row3 += '<td>' + data.members[member]._1011avg_duration + '</td>';
+
+            }
+            if (data.members[member]._1011avg_duration === undefined) {
+                row3 += '<td>' + '00:00:00' + '</td>';
+            }else {
+                row3 += '<td>' + data.members[member]._1112avg_duration + '</td>';
+
+            }
+            if (data.members[member]._1011avg_duration === undefined) {
+                row3 += '<td>' + '00:00:00' + '</td>';
+            }else {
+                row3 += '<td>' + data.members[member]._1314avg_duration + '</td>';
+
+            }
+            if (data.members[member]._1011avg_duration === undefined) {
+                row3 += '<td>' + '00:00:00' + '</td>';
+            }else {
+                row3 += '<td>' + data.members[member]._1415avg_duration + '</td>';
+
+            }
+            if (data.members[member]._1011avg_duration === undefined) {
+                row3 += '<td>' + '00:00:00' + '</td>';
+            }else {
+                row3 += '<td>' + data.members[member]._1516avg_duration + '</td>';
+
+            }
+            if (data.members[member]._1011avg_duration === undefined) {
+                row3 += '<td>' + '00:00:00' + '</td>';
+            }else {
+                row3 += '<td>' + data.members[member]._1617avg_duration + '</td>';
+
+            }
+            if (data.members[member]._1011avg_duration === undefined) {
+                row3 += '<td>' + '00:00:00' + '</td>';
+            }else {
+                row3 += '<td>' + data.members[member]._1718avg_duration + '</td>';
+            }
 
             $table.append(row);
             $table2.append(row2);
