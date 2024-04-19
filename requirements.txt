@@ -9,8 +9,7 @@ click==8.1.7
 colorama==0.4.6
 contourpy==1.2.0
 cycler==0.12.1
-Django==5.0.3
-django-crispy-forms==2.1
+Django==3.1.14
 django-dotenv==1.4.2
 et-xmlfile==1.1.0
 fonttools==4.49.0

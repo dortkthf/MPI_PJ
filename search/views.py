@@ -7,7 +7,8 @@ from django.urls import reverse
 from db.models import *
 from django.http import JsonResponse
 from django.db.models import Sum, Avg, Count
-from datetime import datetime, timedelta
+from datetime import datetime, time, timedelta
+from django.db.models.expressions import RawSQL
 
 from openpyxl.utils import get_column_letter
 from openpyxl import Workbook
@@ -24,6 +25,12 @@ company = ['naver', 'navergfa', 'gmarket', 'eleven', 'wemakeprice']
 change = ['네이버', '네이버지에프에이', '지마켓', '11번가', '위메프']
 
 data = {}
+
+naver_marketer = T_Media_Marketer.objects.filter(
+    media_id = 'naver'
+).values('mkt_cd', 'mkt_nm')
+
+naver_marketer = {item['mkt_cd']: item['mkt_nm'] for item in naver_marketer}
 
 for n in names:
     data[n] = {}
@@ -79,61 +86,59 @@ def seconds_to_hms(seconds):
   ###############################################################
  # 전주, 전전주 평균콜수, 평균콜시간, 전주 시간대별 주간 평균통화량 #
 ###############################################################
-def calculate_weekly_call_data(data, today, user_data, names):
+def calculate_weekly_call_data(data, today, user_data):
     last_week_start, last_week_end = get_previous_week_dates(today - timedelta(weeks=1))
     week_before_last_start, week_before_last_end = get_previous_week_dates(today - timedelta(weeks=2))
-    
+       
     # 전주 평균 콜 시간과 콜 수
     last_week_avg_data = T_CALL_DAY_LIST.objects.filter(
         call_date__range=[last_week_start, last_week_end],
-        sender__in = user_data
-    ).values('sender').annotate(
-        avg_call_duration=Avg('time_to_sec'),
+        send__in = user_data
+    ).values('send').annotate(
+        avg_call_duration=Avg('timetosec'),
         call_count=Count('call_id')
     )
 
     # 전전주 평균 콜 시간과 콜 수
     week_before_last_avg_data = T_CALL_DAY_LIST.objects.filter(
         call_date__range=[week_before_last_start, week_before_last_end],
-        sender__in = user_data
-    ).values('sender').annotate(
-        avg_call_duration=Avg('time_to_sec'),
+        send__in = user_data
+    ).values('send').annotate(
+        avg_call_duration=Avg('timetosec'),
         call_count=Count('call_id')
     )
 
     for call in last_week_avg_data:
-        data[user_data[call['sender']]]['last_avg_call_duration'] = seconds_to_hms(call['avg_call_duration']) if call['avg_call_duration'] else seconds_to_hms(0)
-        data[user_data[call['sender']]]['last_call_count'] = round(call['call_count']/7,1)
+        data[user_data[call['send']]]['last_avg_call_duration'] = seconds_to_hms(call['avg_call_duration']) if call['avg_call_duration'] else seconds_to_hms(0)
+        data[user_data[call['send']]]['last_call_count'] = round(call['call_count']/7,1)
     for call in week_before_last_avg_data:
-        data[user_data[call['sender']]]['b_last_avg_call_duration'] = seconds_to_hms(call['avg_call_duration']) if call['avg_call_duration'] else seconds_to_hms(0)
-        data[user_data[call['sender']]]['b_last_call_count'] = round(call['call_count']/7,1)
+        data[user_data[call['send']]]['b_last_avg_call_duration'] = seconds_to_hms(call['avg_call_duration']) if call['avg_call_duration'] else seconds_to_hms(0)
+        data[user_data[call['send']]]['b_last_call_count'] = round(call['call_count']/7,1)
     
     # 전주 시간대별 주간 평균 통화량 계산
     base_query = T_CALL_DAY_LIST.objects.filter(
         call_date__range=[last_week_start, last_week_end],
-        sender__in=user_data.keys()
+        send__in=user_data
     ).annotate(
-        hour=ExtractHour('call_date')  # 시간 추출
+        hour= ExtractHour('call_date')
     )
-    
-    for sender in user_data.keys():
-        sender_data = base_query.filter(sender=sender)
+
+    for send in user_data:
+        send_data = base_query.filter(send=send)
+        # 각 시간대별로 필터링하고 평균 계산
         for start, end in time_ranges:
-            avg_data = sender_data.filter(
+            # 해당 시간대에 맞는 데이터 필터링
+            time_filtered_query = send_data.filter(
                 hour__gte=start,
                 hour__lt=end
             ).aggregate(
-                avg_call_duration=Avg('call_duration')
+                avg_time_to_sec=Avg('timetosec')  # 'timeToSec' 필드의 평균 계산
             )
             
-            avg_duration = avg_data['avg_call_duration']
-            if avg_duration is None:
-                avg_duration = "00:00:00"  # 적절한 기본값 설정
-            else:
-                avg_duration = seconds_to_hms(avg_duration)
+            # 평균 결과를 딕셔너리에 저장
+            avg_time_to_sec = time_filtered_query['avg_time_to_sec']
+            data[user_data[send]][f'_{start}{end}avg_duration'] = seconds_to_hms(avg_time_to_sec) if avg_time_to_sec is not None else '00:00:00'
 
-            # 결과 저장
-            data[user_data[sender]][f'_{start}{end}avg_duration'] = avg_duration
     return data
 
   #######################
@@ -558,7 +563,8 @@ def sales_report(request):
     # mpid 로그인 아이디 가져와서 세션저장
     mpid = request.GET.get('mpid')  # URL에서 mpid를 가져옵니다.
     session = request.session.get('mpid')
-
+    print(mpid)
+    print(session)
     # 관리자인지 아닌지 판단
     is_manager = session in {'mp001', 'mp003', 'mp008', 'mp8826', 'mp777', 'ceo', 'mp015', 'mp027', 'mp010'}
     xgroup =  ["경영지원팀", "기술지원팀", "퇴사자", "외부", "대대행"]
@@ -587,7 +593,7 @@ def sales_report(request):
         members = T_USERS.objects.filter(dept_code__in=teams)  # 해당 팀 코드에 속하는 사용자들만 조회합니다.
         select = True
         user_dept_code = dept_code 
-
+    print(teams, members)
     return render(request, 'search/search.html', {
         'teams': teams,
         'members': members,
@@ -631,18 +637,18 @@ def fetch_team_data(request):
     
     for com in company:
         company_list[com] = 0
-    
+  
     # 조회할 유저 데이터 처리
     data = data_process(names,today)
     
-    # T_Call_Day 의 sender 값에 해당하는 유저 이름을 찾기위해 user_data 에 key, value 값에 uphone, username 으로 저장
+    # T_Call_Day 의 send 값에 해당하는 유저 이름을 찾기위해 user_data 에 key, value 값에 uphone, username 으로 저장
     user_data = {}
     for user in names:
         res = T_USERS.objects.get(username=user)
         user_data[res.uphone] = res.username
-        
+    
     # 전주, 전전주 평균콜수, 평균콜시간, 전주 시간대별 주간 평균통화량
-    data = calculate_weekly_call_data(data, today, user_data, names)
+    data = calculate_weekly_call_data(data, today, user_data)
     
     if export_excel:
         file_url = export_to_excel(data, names, company)
@@ -666,17 +672,22 @@ def data_process(members, today):
     previous_month_start, previous_month_end = get_previous_month_range(today)
     current_month_start = today.replace(day=1)
 
-    # 모든 관련 데이터를 한 번에 조회합니다.
+    ######################################
+    # 모든 관련 데이터를 한 번에 조회합니다.#
+    ######################################
     last_week_data = T_Sales_Day.objects.filter(
+        sale_date__gte=last_week_start.strftime('%Y%m%d'),
+        sale_date__lte=last_week_end.strftime('%Y%m%d'),
         media_id__in=company,
         mkt_nm__in=members,
-        sale_date__range=[last_week_start, last_week_end]
     ).values('media_id', 'mkt_nm').annotate(total=Sum('tot_amt'))
 
+    
     week_before_last_data = T_Sales_Day.objects.filter(
         media_id__in=company,
-        mkt_nm__in=members,
-        sale_date__range=[week_before_last_start, week_before_last_end]
+        mkt_nm__in=members,        
+        sale_date__gte=week_before_last_start.strftime('%Y%m%d'),
+        sale_date__lte=week_before_last_end.strftime('%Y%m%d')
     ).values('media_id', 'mkt_nm').annotate(total=Sum('tot_amt'))
 
     # 데이터를 파싱하여 처리합니다.
@@ -684,10 +695,31 @@ def data_process(members, today):
 
     week_before_last_totals = { (d['media_id'], d['mkt_nm']): d['total'] for d in week_before_last_data }
 
+
+    ###################################
+    # 네이버 데이터를 한 번에 조회합니다.#
+    ####################################
+    naver_last_week_data = T_Sales_Day.objects.filter(
+        sale_date__gte=last_week_start.strftime('%Y%m%d'),
+        sale_date__lte=last_week_end.strftime('%Y%m%d'),
+        media_id='naver',
+        mkt_cd__in=naver_marketer,
+    ).values('media_id', 'mkt_cd').annotate(total=Sum('tot_amt'))
+
+    naver_week_before_last_data = T_Sales_Day.objects.filter(
+        media_id='naver',
+        mkt_cd__in=naver_marketer,        
+        sale_date__gte=week_before_last_start.strftime('%Y%m%d'),
+        sale_date__lte=week_before_last_end.strftime('%Y%m%d')
+    ).values('media_id', 'mkt_cd').annotate(total=Sum('tot_amt'))
+
+    # 네이버 데이터를 파싱하여 처리합니다.
+    naver_last_week_totals = { (d['media_id'], naver_marketer[d['mkt_cd']]): d['total'] for d in naver_last_week_data }
+    naver_week_before_last_totals = { (d['media_id'], naver_marketer[d['mkt_cd']]): d['total'] for d in naver_week_before_last_data }
+
     # 지난 달과 현재까지의 데이터를 조회합니다.
     last_month_data = T_NETSALES.objects.filter(
-        sale_month__gte=previous_month_start.strftime('%Y%m'),
-        sale_month__lte=previous_month_end.strftime('%Y%m'),
+        sale_month=int(previous_month_start.strftime('%Y%m')),
         mkt_name__in=members
     ).values('mkt_name').annotate(total=Sum('tot_amt'))
 
@@ -697,6 +729,8 @@ def data_process(members, today):
 
         # 전월 매출에 따른 집중 시간 설정
         last_month_total = next((item['total'] for item in last_month_data if item['mkt_name'] == name), 0)
+        # print(name)
+        # print(last_month_total)
         if 1000000 <= last_month_total < 4000000:
             focus = '2시간'
         elif 4000000 <= last_month_total < 8000000:
@@ -735,14 +769,16 @@ def data_process(members, today):
         before_last_live = T_Sales_Day.objects.filter(
             mkt_nm=name,
             tot_amt__gt=0,  # tot_amt가 0보다 큰 조건 추가
-            sale_date__range=[week_before_last_start, week_before_last_end]
+            sale_date__gte=week_before_last_start.strftime('%Y%m%d'),
+            sale_date__lte=week_before_last_end.strftime('%Y%m%d')
         ).count()  # 객체의 개수를 세는 메소드 사용
 
         # 전주 Live 계정수
         last_live = T_Sales_Day.objects.filter(
             mkt_nm=name,
             tot_amt__gt=0,  # tot_amt가 0보다 큰 조건 추가
-            sale_date__range=[last_week_start, last_week_end]
+            sale_date__gte=last_week_start.strftime('%Y%m%d'),
+            sale_date__lte=last_week_end.strftime('%Y%m%d')
         ).count()  # 객체의 개수를 세는 메소드 사용
         
         # 증감
@@ -759,14 +795,16 @@ def data_process(members, today):
         
         # 전월 매출 
         previous_month_sales = round(T_Sales_Day.objects.filter(
-                mkt_nm=name,
-            sale_date__range=[previous_month_start, previous_month_end]
+            mkt_nm=name,
+            sale_date__gte=previous_month_start.strftime('%Y%m%d'),
+            sale_date__lte=previous_month_end.strftime('%Y%m%d')
             ).aggregate(total=Sum('tot_amt'))['total'] or 0)
 
         # 당월 누적 매출
         current_month_sales = round(T_Sales_Day.objects.filter(
             mkt_nm=name,
-            sale_date__range=[current_month_start, today]
+            sale_date__gte=current_month_start.strftime('%Y%m%d'),
+            sale_date__lte=today.strftime('%Y%m%d')
         ).aggregate(total=Sum('tot_amt'))['total'] or 0)
 
         # 예상 매출 계산 (단순화된 예상치 계산)
@@ -781,9 +819,14 @@ def data_process(members, today):
         data[name]['estimated_growth'] = estimated_growth
         
         for com in company:
-            last_week_total = last_week_totals.get((com, name), 0)
-            week_before_last_total = week_before_last_totals.get((com, name), 0)
-            growth_rate = calculate_growth(last_week_total, week_before_last_total)
+            if com == 'naver':
+                last_week_total = naver_last_week_totals.get((com, name), 0)
+                week_before_last_total = naver_week_before_last_totals.get((com, name), 0)
+                growth_rate = calculate_growth(last_week_total, week_before_last_total)
+            else:
+                last_week_total = last_week_totals.get((com, name), 0)
+                week_before_last_total = week_before_last_totals.get((com, name), 0)
+                growth_rate = calculate_growth(last_week_total, week_before_last_total)
             # 결과 저장
             data[name][com] = {
                 'last_week_total': round(last_week_total),

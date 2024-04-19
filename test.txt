@@ -1,0 +1,1945 @@
+# This is an auto-generated Django model module.
+# You'll have to do the following manually to clean this up:
+#   * Rearrange models' order
+#   * Make sure each model has one field with primary_key=True
+#   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
+#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
+# Feel free to rename the models, but don't rename db_table values or field names.
+from django.db import models
+
+
+class T3MediaTarget(models.Model):
+    db_id = models.CharField(primary_key=True, max_length=40)
+    media_id = models.CharField(max_length=10, blank=True, null=True)
+    kwd = models.CharField(max_length=20, blank=True, null=True)
+    prd_no = models.CharField(max_length=10, blank=True, null=True)
+    ad_kind = models.CharField(max_length=20, blank=True, null=True)
+    prd_title = models.CharField(max_length=200, blank=True, null=True)
+    sangho = models.CharField(max_length=50, blank=True, null=True)
+    tell = models.CharField(max_length=20, blank=True, null=True)
+    shop_name = models.CharField(max_length=50, blank=True, null=True)
+    ceo = models.CharField(max_length=100, blank=True, null=True)
+    email = models.CharField(max_length=50, blank=True, null=True)
+    biz_no = models.CharField(max_length=50, blank=True, null=True)
+    sale_req = models.CharField(max_length=200, blank=True, null=True)
+    mkt_id = models.CharField(max_length=20, blank=True, null=True)
+    note = models.CharField(max_length=2000, blank=True, null=True)
+    inp_date = models.DateTimeField(blank=True, null=True)
+    contact_date = models.DateField(blank=True, null=True)
+    shop_url = models.CharField(max_length=200, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_3MEDIA_TARGET'
+
+
+class T3MediaTargetAbly(models.Model):
+    db_id = models.CharField(primary_key=True, max_length=40)
+    media_id = models.CharField(max_length=10, blank=True, null=True)
+    kwd = models.CharField(max_length=20, blank=True, null=True)
+    prd_no = models.CharField(max_length=10, blank=True, null=True)
+    ad_kind = models.CharField(max_length=20, blank=True, null=True)
+    prd_title = models.CharField(max_length=200, blank=True, null=True)
+    sangho = models.CharField(max_length=50, blank=True, null=True)
+    tell = models.CharField(max_length=20, blank=True, null=True)
+    shop_name = models.CharField(max_length=50, blank=True, null=True)
+    ceo = models.CharField(max_length=100, blank=True, null=True)
+    email = models.CharField(max_length=50, blank=True, null=True)
+    biz_no = models.CharField(max_length=50, blank=True, null=True)
+    sale_req = models.CharField(max_length=200, blank=True, null=True)
+    mkt_id = models.CharField(max_length=20, blank=True, null=True)
+    note = models.CharField(max_length=2000, blank=True, null=True)
+    inp_date = models.DateTimeField(blank=True, null=True)
+    contact_date = models.DateField(blank=True, null=True)
+    shop_url = models.CharField(max_length=200, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_3MEDIA_TARGET_ABLY'
+
+
+class T3MediaTargetAbly2(models.Model):
+    db_id = models.CharField(primary_key=True, max_length=40)
+    media_id = models.CharField(max_length=10, blank=True, null=True)
+    kwd = models.CharField(max_length=20, blank=True, null=True)
+    prd_no = models.CharField(max_length=10, blank=True, null=True)
+    ad_kind = models.CharField(max_length=20, blank=True, null=True)
+    prd_title = models.CharField(max_length=200, blank=True, null=True)
+    sangho = models.CharField(max_length=50, blank=True, null=True)
+    tell = models.CharField(max_length=20, blank=True, null=True)
+    shop_name = models.CharField(max_length=50, blank=True, null=True)
+    ceo = models.CharField(max_length=100, blank=True, null=True)
+    email = models.CharField(max_length=50, blank=True, null=True)
+    biz_no = models.CharField(max_length=50, blank=True, null=True)
+    sale_req = models.CharField(max_length=200, blank=True, null=True)
+    mkt_id = models.CharField(max_length=20, blank=True, null=True)
+    note = models.CharField(max_length=2000, blank=True, null=True)
+    inp_date = models.DateTimeField(blank=True, null=True)
+    contact_date = models.DateField(blank=True, null=True)
+    shop_url = models.CharField(max_length=200, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_3MEDIA_TARGET_ABLY2'
+
+
+class T3MediaTargetTest(models.Model):
+    db_id = models.CharField(primary_key=True, max_length=40)
+    media_id = models.CharField(max_length=10, blank=True, null=True)
+    kwd = models.CharField(max_length=20, blank=True, null=True)
+    prd_no = models.CharField(max_length=10, blank=True, null=True)
+    ad_kind = models.CharField(max_length=20, blank=True, null=True)
+    prd_title = models.CharField(max_length=200, blank=True, null=True)
+    sangho = models.CharField(max_length=50, blank=True, null=True)
+    tell = models.CharField(max_length=20, blank=True, null=True)
+    shop_name = models.CharField(max_length=50, blank=True, null=True)
+    ceo = models.CharField(max_length=100, blank=True, null=True)
+    email = models.CharField(max_length=50, blank=True, null=True)
+    biz_no = models.CharField(max_length=50, blank=True, null=True)
+    sale_req = models.CharField(max_length=200, blank=True, null=True)
+    mkt_id = models.CharField(max_length=20, blank=True, null=True)
+    note = models.CharField(max_length=2000, blank=True, null=True)
+    inp_date = models.DateTimeField(blank=True, null=True)
+    contact_date = models.DateField(blank=True, null=True)
+    shop_url = models.CharField(max_length=200, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_3MEDIA_TARGET_TEST'
+
+
+class T3MediaTargetTmp(models.Model):
+    db_id = models.CharField(primary_key=True, max_length=40)
+    media_id = models.CharField(max_length=10, blank=True, null=True)
+    kwd = models.CharField(max_length=20, blank=True, null=True)
+    prd_no = models.CharField(max_length=10, blank=True, null=True)
+    ad_kind = models.CharField(max_length=20, blank=True, null=True)
+    prd_title = models.CharField(max_length=200, blank=True, null=True)
+    sangho = models.CharField(max_length=50, blank=True, null=True)
+    tell = models.CharField(max_length=20, blank=True, null=True)
+    shop_name = models.CharField(max_length=50, blank=True, null=True)
+    ceo = models.CharField(max_length=20, blank=True, null=True)
+    email = models.CharField(max_length=50, blank=True, null=True)
+    biz_no = models.CharField(max_length=50, blank=True, null=True)
+    sale_req = models.CharField(max_length=200, blank=True, null=True)
+    mkt_id = models.CharField(max_length=20, blank=True, null=True)
+    note = models.CharField(max_length=2000, blank=True, null=True)
+    inp_date = models.DateTimeField(blank=True, null=True)
+    contact_date = models.DateField(blank=True, null=True)
+    shop_url = models.CharField(max_length=200, blank=True, null=True)
+    get_data = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_3MEDIA_TARGET_tmp'
+
+
+class TBizsenderList(models.Model):
+    idx = models.AutoField(primary_key=True)
+    cust_id = models.CharField(max_length=20, blank=True, null=True)
+    login_id = models.CharField(max_length=50, blank=True, null=True)
+    cust_nm = models.CharField(max_length=50, blank=True, null=True)
+    tell = models.CharField(max_length=30, blank=True, null=True)
+    std_amt = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_BIZSENDER_LIST'
+
+
+class TBoard(models.Model):
+    bid = models.CharField(primary_key=True, max_length=12)
+    bcode = models.CharField(max_length=20)
+    reg_ugbn = models.CharField(max_length=1, blank=True, null=True)
+    rply_ugbn = models.CharField(max_length=1, blank=True, null=True)
+    mng_uid = models.CharField(max_length=12)
+    mng_name = models.CharField(max_length=50)
+    p_bid = models.CharField(max_length=12)
+    g_bid = models.CharField(max_length=12)
+    blevel = models.IntegerField()
+    bstep = models.IntegerField()
+    sort_code = models.IntegerField()
+    gcode = models.CharField(max_length=20, blank=True, null=True)
+    start_dtm = models.CharField(max_length=14, blank=True, null=True)
+    end_dtm = models.CharField(max_length=14, blank=True, null=True)
+    bstate = models.CharField(max_length=2)
+    name = models.CharField(max_length=100, blank=True, null=True)
+    name2 = models.CharField(max_length=100, blank=True, null=True)
+    title = models.CharField(max_length=200)
+    phone = models.CharField(max_length=30, blank=True, null=True)
+    mobile = models.CharField(max_length=30, blank=True, null=True)
+    fax = models.CharField(max_length=30, blank=True, null=True)
+    email = models.CharField(max_length=50, blank=True, null=True)
+    homepage = models.CharField(max_length=50, blank=True, null=True)
+    baddr = models.CharField(max_length=200, blank=True, null=True)
+    html_yn = models.CharField(max_length=1, blank=True, null=True)
+    passwd = models.CharField(max_length=50, blank=True, null=True)
+    read_cnt = models.IntegerField(blank=True, null=True)
+    bcomment = models.TextField(blank=True, null=True)
+    bresult = models.CharField(max_length=4000, blank=True, null=True)
+    bnote = models.CharField(max_length=4000, blank=True, null=True)
+    ctg_gbn = models.CharField(max_length=20, blank=True, null=True)
+    media_id = models.CharField(max_length=20, blank=True, null=True)
+    media_ids = models.CharField(max_length=4000, blank=True, null=True)
+    media_names = models.CharField(max_length=4000, blank=True, null=True)
+    noti_yn = models.CharField(max_length=1, blank=True, null=True)
+    top_yn = models.CharField(max_length=1, blank=True, null=True)
+    popup_yn = models.CharField(max_length=1, blank=True, null=True)
+    popup_width = models.SmallIntegerField(blank=True, null=True)
+    popup_height = models.SmallIntegerField(blank=True, null=True)
+    popup_x = models.SmallIntegerField(blank=True, null=True)
+    popup_y = models.SmallIntegerField(blank=True, null=True)
+    reg_dtm = models.CharField(max_length=14)
+    upd_dtm = models.CharField(max_length=14)
+    del_dtm = models.CharField(max_length=14)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    del_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=50, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    del_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+    del_ip = models.CharField(max_length=15, blank=True, null=True)
+    mainpop_yn = models.CharField(max_length=1, blank=True, null=True)
+    link_url = models.CharField(max_length=4000, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_BOARD'
+
+
+class TBoardCode(models.Model):
+    code = models.CharField(primary_key=True, max_length=20)
+    mincode = models.CharField(max_length=20)
+    minname = models.CharField(max_length=100, blank=True, null=True)
+    minseq = models.IntegerField()
+    note_title = models.CharField(max_length=20)
+    useyn = models.CharField(max_length=1)
+    reg_dtm = models.CharField(max_length=14)
+    upd_dtm = models.CharField(max_length=14)
+    del_dtm = models.CharField(max_length=14)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=20, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    del_uid = models.CharField(max_length=12, blank=True, null=True)
+    del_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+    del_ip = models.CharField(max_length=15, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_BOARD_CODE'
+        unique_together = (('code', 'mincode'),)
+
+
+class TBoardMenu(models.Model):
+    bcode = models.CharField(primary_key=True, max_length=20)
+    board_nm = models.CharField(max_length=50)
+    board_stat = models.CharField(max_length=1)
+    sort_code = models.SmallIntegerField()
+    reg_dtm = models.CharField(max_length=14, blank=True, null=True)
+    upd_dtm = models.CharField(max_length=14, blank=True, null=True)
+    del_dtm = models.CharField(max_length=14, blank=True, null=True)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=20, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    del_uid = models.CharField(max_length=12, blank=True, null=True)
+    del_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+    del_ip = models.CharField(max_length=15, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_BOARD_MENU'
+
+
+class TBusiness(models.Model):
+    busi_id = models.BigAutoField(primary_key=True)
+    call_stat = models.CharField(max_length=1)
+    srch_dtm = models.CharField(max_length=14)
+    mng_uid = models.CharField(max_length=12, blank=True, null=True)
+    media_id = models.CharField(max_length=20, blank=True, null=True)
+    customer_id = models.CharField(max_length=50, blank=True, null=True)
+    compname = models.CharField(max_length=50, blank=True, null=True)
+    compnum = models.CharField(max_length=10, blank=True, null=True)
+    comp_tel = models.CharField(max_length=20, blank=True, null=True)
+    comp_email = models.CharField(max_length=50, blank=True, null=True)
+    homepage = models.CharField(max_length=50, blank=True, null=True)
+    comp_zipcd = models.CharField(max_length=6, blank=True, null=True)
+    comp_addr1 = models.CharField(max_length=150, blank=True, null=True)
+    comp_addr2 = models.CharField(max_length=100, blank=True, null=True)
+    call_dtm = models.CharField(max_length=14, blank=True, null=True)
+    resv_dtm = models.CharField(max_length=12, blank=True, null=True)
+    comp_note = models.CharField(max_length=2000, blank=True, null=True)
+    reg_dtm = models.CharField(max_length=14, blank=True, null=True)
+    upd_dtm = models.CharField(max_length=14, blank=True, null=True)
+    del_dtm = models.CharField(max_length=14, blank=True, null=True)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=20, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    del_uid = models.CharField(max_length=12, blank=True, null=True)
+    del_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+    del_ip = models.CharField(max_length=15, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_BUSINESS'
+
+
+class TCallDayList(models.Model):
+    call_id = models.CharField(primary_key=True, max_length=40)
+    send = models.CharField(max_length=20, blank=True, null=True)
+    recv = models.CharField(max_length=20, blank=True, null=True)
+    call_date = models.DateTimeField(blank=True, null=True)
+    call_time = models.CharField(max_length=30, blank=True, null=True)
+    timetosec = models.IntegerField(db_column='timeToSec', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'T_CALL_DAY_LIST'
+
+
+class TCallDayListTest(models.Model):
+    call_id = models.CharField(primary_key=True, max_length=40)
+    send = models.CharField(max_length=20, blank=True, null=True)
+    recv = models.CharField(max_length=20, blank=True, null=True)
+    call_date = models.DateTimeField(blank=True, null=True)
+    call_time = models.CharField(max_length=30, blank=True, null=True)
+    timetosec = models.IntegerField(db_column='timeToSec', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'T_CALL_DAY_LIST_TEST'
+
+
+class TCallList(models.Model):
+    work_date = models.CharField(primary_key=True, max_length=8)
+    job_group = models.CharField(max_length=1)
+    work_phone = models.CharField(max_length=20)
+    send_cnt = models.SmallIntegerField()
+    send_second = models.SmallIntegerField()
+    recv_cnt = models.SmallIntegerField()
+    recv_second = models.SmallIntegerField()
+    reg_dtm = models.CharField(max_length=14, blank=True, null=True)
+    upd_dtm = models.CharField(max_length=14, blank=True, null=True)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=20, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_CALL_LIST'
+        unique_together = (('work_date', 'job_group', 'work_phone'),)
+
+
+class TCode(models.Model):
+    code = models.CharField(primary_key=True, max_length=20)
+    mincode = models.CharField(max_length=20)
+    minname = models.CharField(max_length=100, blank=True, null=True)
+    minseq = models.IntegerField()
+    min_color = models.CharField(max_length=10, blank=True, null=True)
+    min_bgcolor = models.CharField(max_length=10, blank=True, null=True)
+    note_title = models.CharField(max_length=20)
+    useyn = models.CharField(max_length=1)
+    reg_dtm = models.CharField(max_length=14)
+    upd_dtm = models.CharField(max_length=14)
+    del_dtm = models.CharField(max_length=14)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=20, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    del_uid = models.CharField(max_length=12, blank=True, null=True)
+    del_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+    del_ip = models.CharField(max_length=15, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_CODE'
+        unique_together = (('code', 'mincode'),)
+
+
+class TCustomer(models.Model):
+    cust_id = models.CharField(primary_key=True, max_length=16)
+    master_id = models.CharField(max_length=12)
+    cust_gbn = models.CharField(max_length=1)
+    cust_nm = models.CharField(max_length=50)
+    cust_stat = models.CharField(max_length=1)
+    trns_id = models.CharField(max_length=12)
+    media_id = models.CharField(max_length=20)
+    customer_id = models.CharField(max_length=50)
+    mkt_cd = models.CharField(max_length=50)
+    mng_uid = models.CharField(max_length=12)
+    cust_worker = models.CharField(max_length=50)
+    cust_tel = models.CharField(max_length=20)
+    cust_email = models.CharField(max_length=50)
+    map_date = models.CharField(max_length=8)
+    bcategory = models.CharField(max_length=8)
+    homepage = models.CharField(max_length=200)
+    cust_type = models.CharField(max_length=1)
+    cust_note = models.CharField(max_length=2000, blank=True, null=True)
+    compname = models.CharField(max_length=50)
+    compnum = models.CharField(max_length=10)
+    subnum = models.CharField(max_length=4)
+    compceo = models.CharField(max_length=25)
+    czipcd = models.CharField(max_length=6)
+    caddr1 = models.CharField(max_length=150)
+    caddr2 = models.CharField(max_length=100)
+    comptype = models.CharField(max_length=50)
+    compclass = models.CharField(max_length=50)
+    tax_worker = models.CharField(max_length=50)
+    tax_tel = models.CharField(max_length=20)
+    tax_email = models.CharField(max_length=50)
+    reg_dtm = models.CharField(max_length=14, blank=True, null=True)
+    upd_dtm = models.CharField(max_length=14, blank=True, null=True)
+    del_dtm = models.CharField(max_length=14, blank=True, null=True)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=20, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    del_uid = models.CharField(max_length=12, blank=True, null=True)
+    del_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+    del_ip = models.CharField(max_length=15, blank=True, null=True)
+    reg_gbn = models.CharField(max_length=1, blank=True, null=True)
+    batch_id = models.CharField(max_length=12, blank=True, null=True)
+    rpt_grade = models.IntegerField()
+    rpt_email = models.CharField(max_length=50, blank=True, null=True)
+    rpt_start_dt = models.CharField(max_length=8, blank=True, null=True)
+    rpt_end_dt = models.CharField(max_length=8, blank=True, null=True)
+    rpt_type_naver = models.CharField(max_length=10)
+    rpt_type_11st = models.CharField(max_length=10)
+    ebay_goods_yn = models.IntegerField()
+    ebay_adid_yn = models.IntegerField()
+    ebay_roas_yn = models.IntegerField()
+    rpt_daily = models.IntegerField()
+    rpt_weeky = models.IntegerField()
+    rpt_month = models.IntegerField()
+    cust_tel2 = models.CharField(max_length=20, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_CUSTOMER'
+        unique_together = (('media_id', 'customer_id'),)
+
+
+class TCustomerHistory(models.Model):
+    cust_id = models.CharField(primary_key=True, max_length=16)
+    mkt_cd = models.CharField(max_length=50)
+    sales_uid = models.CharField(max_length=12)
+    media_id = models.CharField(max_length=20)
+    customer_id = models.CharField(max_length=50)
+
+    class Meta:
+        managed = False
+        db_table = 'T_CUSTOMER_HISTORY'
+        unique_together = (('cust_id', 'mkt_cd', 'sales_uid'),)
+
+
+class TCustomerManager(models.Model):
+    cust_id = models.CharField(primary_key=True, max_length=16)
+    mkt_cd = models.CharField(max_length=50)
+    sales_uid = models.CharField(max_length=12)
+    sales_rate = models.SmallIntegerField()
+    media_id = models.CharField(max_length=20)
+    customer_id = models.CharField(max_length=50)
+
+    class Meta:
+        managed = False
+        db_table = 'T_CUSTOMER_MANAGER'
+        unique_together = (('cust_id', 'mkt_cd', 'sales_uid'),)
+
+
+class TCustomerManagerOld(models.Model):
+    cust_id = models.CharField(primary_key=True, max_length=12)
+    mkt_cd = models.CharField(max_length=50)
+    sales_uid = models.CharField(max_length=12)
+    sales_rate = models.SmallIntegerField()
+    media_id = models.CharField(max_length=20)
+    customer_id = models.CharField(max_length=50)
+
+    class Meta:
+        managed = False
+        db_table = 'T_CUSTOMER_MANAGER_old'
+        unique_together = (('cust_id', 'mkt_cd', 'sales_uid'),)
+
+
+class TCustomerTest(models.Model):
+    cust_id = models.CharField(primary_key=True, max_length=12)
+    master_id = models.CharField(max_length=12)
+    cust_gbn = models.CharField(max_length=1)
+    cust_nm = models.CharField(max_length=50)
+    cust_stat = models.CharField(max_length=1)
+    trns_id = models.CharField(max_length=12)
+    media_id = models.CharField(max_length=20)
+    customer_id = models.CharField(max_length=50)
+    mkt_cd = models.CharField(max_length=50)
+    mng_uid = models.CharField(max_length=12)
+    cust_worker = models.CharField(max_length=50)
+    cust_tel = models.CharField(max_length=20)
+    cust_email = models.CharField(max_length=50)
+    map_date = models.CharField(max_length=8)
+    bcategory = models.CharField(max_length=8)
+    homepage = models.CharField(max_length=50)
+    cust_type = models.CharField(max_length=1)
+    cust_note = models.CharField(max_length=2000, blank=True, null=True)
+    compname = models.CharField(max_length=50)
+    compnum = models.CharField(max_length=10)
+    subnum = models.CharField(max_length=4)
+    compceo = models.CharField(max_length=25)
+    czipcd = models.CharField(max_length=6)
+    caddr1 = models.CharField(max_length=150)
+    caddr2 = models.CharField(max_length=100)
+    comptype = models.CharField(max_length=50)
+    compclass = models.CharField(max_length=50)
+    tax_worker = models.CharField(max_length=50)
+    tax_tel = models.CharField(max_length=20)
+    tax_email = models.CharField(max_length=50)
+    reg_dtm = models.CharField(max_length=14, blank=True, null=True)
+    upd_dtm = models.CharField(max_length=14, blank=True, null=True)
+    del_dtm = models.CharField(max_length=14, blank=True, null=True)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=20, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    del_uid = models.CharField(max_length=12, blank=True, null=True)
+    del_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+    del_ip = models.CharField(max_length=15, blank=True, null=True)
+    reg_gbn = models.CharField(max_length=1, blank=True, null=True)
+    batch_id = models.CharField(max_length=12, blank=True, null=True)
+    rpt_grade = models.IntegerField()
+    rpt_email = models.CharField(max_length=50, blank=True, null=True)
+    rpt_start_dt = models.CharField(max_length=8, blank=True, null=True)
+    rpt_end_dt = models.CharField(max_length=8, blank=True, null=True)
+    rpt_type_naver = models.CharField(max_length=10)
+    rpt_type_11st = models.CharField(max_length=10)
+    ebay_goods_yn = models.IntegerField()
+    ebay_adid_yn = models.IntegerField()
+    ebay_roas_yn = models.IntegerField()
+    rpt_daily = models.IntegerField()
+    rpt_weeky = models.IntegerField()
+    rpt_month = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'T_CUSTOMER_TEST'
+        unique_together = (('media_id', 'customer_id'),)
+
+
+class TCustomerOld(models.Model):
+    cust_id = models.CharField(primary_key=True, max_length=12)
+    master_id = models.CharField(max_length=12)
+    cust_gbn = models.CharField(max_length=1)
+    cust_nm = models.CharField(max_length=50)
+    cust_stat = models.CharField(max_length=1)
+    trns_id = models.CharField(max_length=12)
+    media_id = models.CharField(max_length=20)
+    customer_id = models.CharField(max_length=50)
+    mkt_cd = models.CharField(max_length=50)
+    mng_uid = models.CharField(max_length=12)
+    cust_worker = models.CharField(max_length=50)
+    cust_tel = models.CharField(max_length=20)
+    cust_email = models.CharField(max_length=50)
+    map_date = models.CharField(max_length=8)
+    bcategory = models.CharField(max_length=8)
+    homepage = models.CharField(max_length=200)
+    cust_type = models.CharField(max_length=1)
+    cust_note = models.CharField(max_length=2000, blank=True, null=True)
+    compname = models.CharField(max_length=50)
+    compnum = models.CharField(max_length=10)
+    subnum = models.CharField(max_length=4)
+    compceo = models.CharField(max_length=25)
+    czipcd = models.CharField(max_length=6)
+    caddr1 = models.CharField(max_length=150)
+    caddr2 = models.CharField(max_length=100)
+    comptype = models.CharField(max_length=50)
+    compclass = models.CharField(max_length=50)
+    tax_worker = models.CharField(max_length=50)
+    tax_tel = models.CharField(max_length=20)
+    tax_email = models.CharField(max_length=50)
+    reg_dtm = models.CharField(max_length=14, blank=True, null=True)
+    upd_dtm = models.CharField(max_length=14, blank=True, null=True)
+    del_dtm = models.CharField(max_length=14, blank=True, null=True)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=20, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    del_uid = models.CharField(max_length=12, blank=True, null=True)
+    del_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+    del_ip = models.CharField(max_length=15, blank=True, null=True)
+    reg_gbn = models.CharField(max_length=1, blank=True, null=True)
+    batch_id = models.CharField(max_length=12, blank=True, null=True)
+    rpt_grade = models.IntegerField()
+    rpt_email = models.CharField(max_length=50, blank=True, null=True)
+    rpt_start_dt = models.CharField(max_length=8, blank=True, null=True)
+    rpt_end_dt = models.CharField(max_length=8, blank=True, null=True)
+    rpt_type_naver = models.CharField(max_length=10)
+    rpt_type_11st = models.CharField(max_length=10)
+    ebay_goods_yn = models.IntegerField()
+    ebay_adid_yn = models.IntegerField()
+    ebay_roas_yn = models.IntegerField()
+    rpt_daily = models.IntegerField()
+    rpt_weeky = models.IntegerField()
+    rpt_month = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'T_CUSTOMER_old'
+        unique_together = (('media_id', 'customer_id'),)
+
+
+class TDailyReport(models.Model):
+    rep_date = models.CharField(primary_key=True, max_length=8)
+    etc_amt = models.IntegerField()
+    rep_sales = models.CharField(max_length=2000)
+    rep_issue = models.CharField(max_length=2000)
+    reg_dtm = models.CharField(max_length=14, blank=True, null=True)
+    upd_dtm = models.CharField(max_length=14, blank=True, null=True)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=20, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_DAILY_REPORT'
+
+
+class TDailyReportAmt(models.Model):
+    rep_month = models.CharField(primary_key=True, max_length=6)
+    media_id = models.CharField(max_length=20)
+    target_amt = models.BigIntegerField()
+    reg_dtm = models.CharField(max_length=14, blank=True, null=True)
+    upd_dtm = models.CharField(max_length=14, blank=True, null=True)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=20, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_DAILY_REPORT_AMT'
+        unique_together = (('rep_month', 'media_id'),)
+
+
+class TDept(models.Model):
+    dept_code = models.CharField(primary_key=True, max_length=12)
+    dept_name = models.CharField(max_length=40)
+    sort_code = models.SmallIntegerField()
+    dept_note = models.CharField(max_length=500)
+    reg_dtm = models.CharField(max_length=14)
+    upd_dtm = models.CharField(max_length=14)
+    del_dtm = models.CharField(max_length=14)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    del_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=50, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    del_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+    del_ip = models.CharField(max_length=15, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_DEPT'
+
+
+class TEditorFile(models.Model):
+    img_id = models.CharField(primary_key=True, max_length=12)
+    doc_grp = models.CharField(max_length=30)
+    doc_id = models.CharField(max_length=30)
+    file_name = models.CharField(max_length=20, blank=True, null=True)
+    orig_name = models.CharField(max_length=255, blank=True, null=True)
+    file_ksize = models.IntegerField(blank=True, null=True)
+    reg_id = models.CharField(max_length=20, blank=True, null=True)
+    reg_dtm = models.CharField(max_length=14, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_EDITOR_FILE'
+
+
+class TElevenAmt(models.Model):
+    idx = models.CharField(primary_key=True, max_length=40)
+    amt_date = models.CharField(max_length=20, blank=True, null=True)
+    gubun = models.CharField(max_length=20, blank=True, null=True)
+    ad_gubun = models.CharField(max_length=20, blank=True, null=True)
+    page_gubun = models.CharField(max_length=20, blank=True, null=True)
+    hometab_gubun = models.CharField(max_length=10, blank=True, null=True)
+    sales_status = models.CharField(max_length=10, blank=True, null=True)
+    sales_gubun = models.CharField(max_length=20, blank=True, null=True)
+    sales_config_date = models.CharField(max_length=20, blank=True, null=True)
+    mkt_id = models.CharField(max_length=20, blank=True, null=True)
+    mkt_no = models.CharField(max_length=10, blank=True, null=True)
+    pre_agency = models.CharField(max_length=20, blank=True, null=True)
+    pre_agency_cancel_date = models.CharField(max_length=20, blank=True, null=True)
+    pre_agency_trans_date = models.CharField(max_length=20, blank=True, null=True)
+    ad_id = models.CharField(max_length=30, blank=True, null=True)
+    seller_id = models.CharField(max_length=30, blank=True, null=True)
+    seller_type = models.CharField(max_length=10, blank=True, null=True)
+    member_no = models.CharField(max_length=20, blank=True, null=True)
+    biz_no = models.CharField(max_length=20, blank=True, null=True)
+    tot_bind_amt = models.IntegerField(blank=True, null=True)
+    cal_bind_amt = models.IntegerField(blank=True, null=True)
+    inp_date = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_ELEVEN_AMT'
+
+
+class TGfaList(models.Model):
+    idx = models.AutoField(primary_key=True)
+    ad_id = models.CharField(max_length=50, blank=True, null=True)
+    ad_mng_id = models.CharField(max_length=50, blank=True, null=True)
+    mkt_id = models.CharField(max_length=20, blank=True, null=True)
+    app_dtm = models.CharField(max_length=20, blank=True, null=True)
+    acc_dtm = models.CharField(max_length=20, blank=True, null=True)
+    sangtae = models.CharField(max_length=10, blank=True, null=True)
+    mng_type = models.CharField(max_length=20, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_GFA_LIST'
+
+
+class TGmarketAdd(models.Model):
+    idx = models.AutoField(primary_key=True)
+    amt = models.IntegerField(blank=True, null=True)
+    masterid = models.CharField(db_column='masterId', max_length=20, blank=True, null=True)  # Field name made lowercase.
+    mktname = models.CharField(db_column='mktName', max_length=10, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'T_GMARKET_ADD'
+
+
+class TGmkDistList(models.Model):
+    idx = models.AutoField(primary_key=True)
+    uid = models.CharField(unique=True, max_length=20, blank=True, null=True)
+    user_name = models.CharField(max_length=10, blank=True, null=True)
+    active = models.IntegerField(blank=True, null=True)
+    ably_active = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_GMK_DIST_LIST'
+
+
+class THoliday(models.Model):
+    hdate = models.CharField(primary_key=True, max_length=8)
+    hnote = models.CharField(max_length=50, blank=True, null=True)
+    reg_dtm = models.CharField(max_length=14, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_dtm = models.CharField(max_length=14, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=20, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_HOLIDAY'
+
+
+class TInbound(models.Model):
+    inbound_id = models.CharField(primary_key=True, max_length=100)
+    in_date = models.CharField(max_length=10, blank=True, null=True)
+    ad_name = models.CharField(max_length=100, blank=True, null=True)
+    site_url = models.CharField(max_length=1000, blank=True, null=True)
+    tel = models.CharField(max_length=15, blank=True, null=True)
+    email = models.CharField(max_length=100, blank=True, null=True)
+    ad_prd = models.CharField(max_length=100, blank=True, null=True)
+    inquiry = models.CharField(max_length=2000, blank=True, null=True)
+    mp_mng = models.CharField(max_length=100, blank=True, null=True)
+    uid = models.CharField(max_length=12, blank=True, null=True)
+    sangho = models.CharField(max_length=20, blank=True, null=True)
+    cust_worker = models.CharField(max_length=10, blank=True, null=True)
+    tel2 = models.CharField(max_length=15, blank=True, null=True)
+    email2 = models.CharField(max_length=100, blank=True, null=True)
+    media_name = models.CharField(max_length=100, blank=True, null=True)
+    media_id = models.CharField(max_length=100, blank=True, null=True)
+    cust_id = models.CharField(max_length=20, blank=True, null=True)
+    bigo = models.CharField(max_length=2000, blank=True, null=True)
+    reg_date = models.DateTimeField(blank=True, null=True)
+    del_uid = models.CharField(max_length=12, blank=True, null=True)
+    del_name = models.CharField(max_length=10, blank=True, null=True)
+    del_ip = models.CharField(max_length=20, blank=True, null=True)
+    del_dtm = models.DateTimeField(blank=True, null=True)
+    ad_status = models.CharField(max_length=1, blank=True, null=True)
+    ad_gbn = models.CharField(max_length=1, blank=True, null=True)
+    sales_amt = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_INBOUND'
+
+
+class TJobreq(models.Model):
+    jreq_id = models.CharField(primary_key=True, max_length=12)
+    menu_code = models.CharField(max_length=10)
+    job_code = models.CharField(max_length=20)
+    ctg_code = models.CharField(max_length=20)
+    jtmp_id = models.CharField(max_length=12)
+    cust_id = models.CharField(max_length=12)
+    customer_id = models.CharField(max_length=50)
+    customer_nm = models.CharField(max_length=50)
+    media_ids = models.CharField(max_length=4000, blank=True, null=True)
+    media_names = models.CharField(max_length=4000, blank=True, null=True)
+    jreq_uid = models.CharField(max_length=12)
+    jreq_name = models.CharField(max_length=50)
+    title = models.CharField(max_length=200)
+    limit_date = models.CharField(max_length=14, blank=True, null=True)
+    job_group = models.CharField(max_length=1)
+    contents = models.TextField(blank=True, null=True)
+    jreq_stat = models.CharField(max_length=1)
+    rej_comment = models.CharField(max_length=200)
+    read_uid = models.CharField(max_length=12, blank=True, null=True)
+    read_dtm = models.CharField(max_length=14)
+    act_uid = models.CharField(max_length=12, blank=True, null=True)
+    act_dtm = models.CharField(max_length=14)
+    fin_uid = models.CharField(max_length=12, blank=True, null=True)
+    fin_dtm = models.CharField(max_length=14)
+    rej_uid = models.CharField(max_length=12, blank=True, null=True)
+    rej_dtm = models.CharField(max_length=14)
+    html_yn = models.CharField(max_length=1, blank=True, null=True)
+    reg_dtm = models.CharField(max_length=14)
+    upd_dtm = models.CharField(max_length=14)
+    del_dtm = models.CharField(max_length=14)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    del_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=50, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    del_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+    del_ip = models.CharField(max_length=15, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_JOBREQ'
+
+
+class TJobreqCode(models.Model):
+    menu_code = models.CharField(primary_key=True, max_length=10)
+    code = models.CharField(max_length=20)
+    mincode = models.CharField(max_length=20)
+    minname = models.CharField(max_length=100, blank=True, null=True)
+    minseq = models.IntegerField()
+    note_title = models.CharField(max_length=20)
+    useyn = models.CharField(max_length=1)
+    reg_dtm = models.CharField(max_length=14)
+    upd_dtm = models.CharField(max_length=14)
+    del_dtm = models.CharField(max_length=14)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=20, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    del_uid = models.CharField(max_length=12, blank=True, null=True)
+    del_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+    del_ip = models.CharField(max_length=15, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_JOBREQ_CODE'
+        unique_together = (('menu_code', 'code', 'mincode'),)
+
+
+class TJobreqManager(models.Model):
+    jtmp_id = models.CharField(primary_key=True, max_length=12)
+    mng_uid = models.CharField(max_length=12)
+
+    class Meta:
+        managed = False
+        db_table = 'T_JOBREQ_MANAGER'
+        unique_together = (('jtmp_id', 'mng_uid'),)
+
+
+class TJobreqMedia(models.Model):
+    media_id = models.CharField(primary_key=True, max_length=20)
+    media_nm = models.CharField(max_length=50)
+    sort_code = models.SmallIntegerField()
+    media_stat = models.CharField(max_length=1)
+    media_note = models.CharField(max_length=2000, blank=True, null=True)
+    reg_dtm = models.CharField(max_length=14, blank=True, null=True)
+    upd_dtm = models.CharField(max_length=14, blank=True, null=True)
+    del_dtm = models.CharField(max_length=14, blank=True, null=True)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=20, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    del_uid = models.CharField(max_length=12, blank=True, null=True)
+    del_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+    del_ip = models.CharField(max_length=15, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_JOBREQ_MEDIA'
+
+
+class TJobreqTmpl(models.Model):
+    jtmp_id = models.CharField(primary_key=True, max_length=12)
+    menu_code = models.CharField(max_length=10)
+    job_code = models.CharField(max_length=20)
+    ctg_code = models.CharField(max_length=20)
+    title = models.CharField(max_length=200)
+    contents = models.TextField(blank=True, null=True)
+    jtmp_stat = models.CharField(max_length=1)
+    html_yn = models.CharField(max_length=1, blank=True, null=True)
+    reg_dtm = models.CharField(max_length=14, blank=True, null=True)
+    upd_dtm = models.CharField(max_length=14, blank=True, null=True)
+    del_dtm = models.CharField(max_length=14, blank=True, null=True)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=20, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    del_uid = models.CharField(max_length=12, blank=True, null=True)
+    del_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+    del_ip = models.CharField(max_length=15, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_JOBREQ_TMPL'
+
+
+class TLog(models.Model):
+    log_seq = models.BigAutoField(primary_key=True)
+    log_dtm = models.CharField(max_length=14)
+    log_uid = models.CharField(max_length=12, blank=True, null=True)
+    menu_id = models.CharField(max_length=20, blank=True, null=True)
+    doc_id = models.CharField(max_length=20, blank=True, null=True)
+    state = models.CharField(max_length=150, blank=True, null=True)
+    view_cnt = models.PositiveIntegerField(blank=True, null=True)
+    log_ip = models.CharField(max_length=15, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_LOG'
+
+
+class TMedia(models.Model):
+    media_id = models.CharField(primary_key=True, max_length=20)
+    media_nm = models.CharField(max_length=50)
+    sort_code = models.SmallIntegerField()
+    media_stat = models.CharField(max_length=1)
+    login_id = models.CharField(max_length=50)
+    login_pw = models.CharField(max_length=50)
+    media_note = models.CharField(max_length=2000, blank=True, null=True)
+    media_gbn = models.CharField(max_length=1)
+    scrap_mode = models.CharField(max_length=1)
+    scrap_marketer_yn = models.CharField(max_length=1)
+    scrap_transfer_yn = models.CharField(max_length=1)
+    scrap_transfer2_yn = models.CharField(max_length=1)
+    scrap_sales_yn = models.CharField(max_length=1)
+    reg_dtm = models.CharField(max_length=14, blank=True, null=True)
+    upd_dtm = models.CharField(max_length=14, blank=True, null=True)
+    del_dtm = models.CharField(max_length=14, blank=True, null=True)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=20, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    del_uid = models.CharField(max_length=12, blank=True, null=True)
+    del_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+    del_ip = models.CharField(max_length=15, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_MEDIA'
+
+
+class TMediaData(models.Model):
+    idx = models.CharField(max_length=100)
+    tpl_idx = models.CharField(max_length=100, blank=True, null=True)
+    column_check = models.IntegerField(blank=True, null=True)
+    i_date = models.DateTimeField(blank=True, null=True)
+    uploader = models.CharField(max_length=10, blank=True, null=True)
+    uploader_nm = models.CharField(max_length=10, blank=True, null=True)
+    d1 = models.CharField(max_length=100, blank=True, null=True)
+    d2 = models.CharField(max_length=100, blank=True, null=True)
+    d3 = models.CharField(max_length=100, blank=True, null=True)
+    d4 = models.TextField(blank=True, null=True)
+    d5 = models.TextField(blank=True, null=True)
+    d6 = models.TextField(blank=True, null=True)
+    d7 = models.TextField(blank=True, null=True)
+    d8 = models.TextField(blank=True, null=True)
+    d9 = models.TextField(blank=True, null=True)
+    d10 = models.TextField(blank=True, null=True)
+    d11 = models.TextField(blank=True, null=True)
+    d12 = models.TextField(blank=True, null=True)
+    d13 = models.TextField(blank=True, null=True)
+    d14 = models.TextField(blank=True, null=True)
+    d15 = models.TextField(blank=True, null=True)
+    d16 = models.TextField(blank=True, null=True)
+    d17 = models.TextField(blank=True, null=True)
+    d18 = models.TextField(blank=True, null=True)
+    d19 = models.TextField(blank=True, null=True)
+    d20 = models.TextField(blank=True, null=True)
+    d21 = models.TextField(blank=True, null=True)
+    d22 = models.TextField(blank=True, null=True)
+    d23 = models.TextField(blank=True, null=True)
+    d24 = models.TextField(blank=True, null=True)
+    d25 = models.TextField(blank=True, null=True)
+    d26 = models.TextField(blank=True, null=True)
+    d27 = models.TextField(blank=True, null=True)
+    d28 = models.TextField(blank=True, null=True)
+    d29 = models.TextField(blank=True, null=True)
+    d30 = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_MEDIA_DATA'
+
+
+class TMediaDataList(models.Model):
+    idx = models.CharField(primary_key=True, max_length=100)
+    title = models.CharField(max_length=100, blank=True, null=True)
+    i_date = models.DateTimeField(blank=True, null=True)
+    uploader = models.CharField(max_length=10, blank=True, null=True)
+    uploader_nm = models.CharField(max_length=10, blank=True, null=True)
+    modifycol = models.CharField(db_column='modifyCol', max_length=100, blank=True, null=True)  # Field name made lowercase.
+    expose = models.IntegerField(blank=True, null=True)
+    data_desc = models.CharField(max_length=5000, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_MEDIA_DATA_LIST'
+
+
+class TMediaMarketer(models.Model):
+    media_id = models.CharField(primary_key=True, max_length=20)
+    mkt_cd = models.CharField(max_length=50)
+    mkt_nm = models.CharField(max_length=50)
+    mkt_stat = models.CharField(max_length=1)
+    mkt_uid = models.CharField(max_length=12)
+    app_dtm = models.CharField(max_length=14)
+    media_note = models.CharField(max_length=2000, blank=True, null=True)
+    reg_gbn = models.CharField(max_length=1, blank=True, null=True)
+    reg_dtm = models.CharField(max_length=14, blank=True, null=True)
+    upd_dtm = models.CharField(max_length=14, blank=True, null=True)
+    del_dtm = models.CharField(max_length=14, blank=True, null=True)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=20, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    del_uid = models.CharField(max_length=12, blank=True, null=True)
+    del_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+    del_ip = models.CharField(max_length=15, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_MEDIA_MARKETER'
+        unique_together = (('media_id', 'mkt_cd'),)
+
+
+class TMenuId(models.Model):
+    menuid = models.CharField(primary_key=True, max_length=30)
+    menunm = models.CharField(max_length=30)
+    sort_code = models.PositiveSmallIntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_MENU_ID'
+
+
+class TMonthPromotion(models.Model):
+    idx = models.CharField(primary_key=True, max_length=100)
+    media_id = models.CharField(max_length=50, blank=True, null=True)
+    mkt_cd = models.CharField(max_length=50, blank=True, null=True)
+    mkt_uid = models.CharField(max_length=50, blank=True, null=True)
+    customer_id = models.CharField(max_length=100, blank=True, null=True)
+    customer_nm = models.CharField(max_length=100, blank=True, null=True)
+    username = models.CharField(max_length=50, blank=True, null=True)
+    dept_name = models.CharField(max_length=100, blank=True, null=True)
+    trns_gbn = models.CharField(max_length=1, blank=True, null=True)
+    amt = models.CharField(max_length=1000, blank=True, null=True)
+    idate = models.DateTimeField(db_column='iDate', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'T_MONTH_PROMOTION'
+
+
+class TMonthRate(models.Model):
+    rate_id = models.CharField(primary_key=True, max_length=12)
+    min_atm = models.BigIntegerField()
+    max_atm = models.BigIntegerField()
+    percent = models.IntegerField()
+    reg_dtm = models.CharField(max_length=14, blank=True, null=True)
+    upd_dtm = models.CharField(max_length=14, blank=True, null=True)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=20, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_MONTH_RATE'
+        unique_together = (('rate_id', 'min_atm', 'max_atm'),)
+
+
+class TMonthRateNetsale(models.Model):
+    rate_id = models.CharField(primary_key=True, max_length=12)
+    min_atm = models.BigIntegerField()
+    max_atm = models.BigIntegerField()
+    percent = models.IntegerField()
+    reg_dtm = models.CharField(max_length=14, blank=True, null=True)
+    upd_dtm = models.CharField(max_length=14, blank=True, null=True)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=20, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_MONTH_RATE_NETSALE'
+        unique_together = (('rate_id', 'min_atm', 'max_atm'),)
+
+
+class TNaverbizFav(models.Model):
+    cid = models.CharField(db_column='cId', primary_key=True, max_length=30)  # Field name made lowercase.
+    mkt_nm = models.CharField(max_length=10, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_NAVERBIZ_FAV'
+
+
+class TNaverBizcheck(models.Model):
+    idx = models.CharField(primary_key=True, max_length=100)
+    cid = models.CharField(max_length=20)
+    reason = models.CharField(max_length=1000, blank=True, null=True)
+    idate = models.DateTimeField(db_column='iDate', blank=True, null=True)  # Field name made lowercase.
+    ip = models.CharField(max_length=20, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_NAVER_BIZCHECK'
+
+
+class TNaverCustomer(models.Model):
+    customer_linkid = models.CharField(primary_key=True, max_length=36)
+    customer_id = models.CharField(max_length=20)
+    client_loginid = models.CharField(max_length=100)
+    reg_dtm = models.CharField(max_length=14, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_NAVER_CUSTOMER'
+
+
+class TNaverSmsUnsend(models.Model):
+    idx = models.AutoField(primary_key=True)
+    customer_id = models.CharField(max_length=20, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_NAVER_SMS_UNSEND'
+
+
+class TNetsalesTotal(models.Model):
+    sale_id = models.CharField(primary_key=True, max_length=30)
+    sale_month = models.IntegerField(blank=True, null=True)
+    mkt_name = models.CharField(max_length=10, blank=True, null=True)
+    tot_amt = models.IntegerField(blank=True, null=True)
+    next_rate = models.IntegerField(blank=True, null=True)
+    next_amt = models.BigIntegerField(blank=True, null=True)
+    target_time = models.IntegerField(blank=True, null=True)
+    target_call = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_NETSALES_TOTAL'
+
+
+class TPublicComment(models.Model):
+    cid = models.CharField(primary_key=True, max_length=12)
+    doc_grp = models.CharField(max_length=30)
+    doc_id = models.CharField(max_length=30)
+    doc_gbn = models.CharField(max_length=4)
+    cstate = models.CharField(max_length=2, blank=True, null=True)
+    reg_ugbn = models.CharField(max_length=1, blank=True, null=True)
+    ccomment = models.CharField(max_length=4000, blank=True, null=True)
+    reg_dtm = models.CharField(max_length=14)
+    upd_dtm = models.CharField(max_length=14)
+    del_dtm = models.CharField(max_length=14)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    del_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=50, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    del_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+    del_ip = models.CharField(max_length=15, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_PUBLIC_COMMENT'
+
+
+class TPublicLog(models.Model):
+    lid = models.CharField(primary_key=True, max_length=12)
+    doc_grp = models.CharField(max_length=30)
+    doc_id = models.CharField(max_length=30)
+    doc_state = models.CharField(max_length=10, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    upd_dtm = models.CharField(max_length=14)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_PUBLIC_LOG'
+
+
+class TPublicRead(models.Model):
+    doc_grp = models.CharField(primary_key=True, max_length=30)
+    doc_id = models.CharField(max_length=30)
+    read_uid = models.CharField(max_length=12)
+    read_result = models.CharField(max_length=30)
+    reg_dtm = models.CharField(max_length=14, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_PUBLIC_READ'
+        unique_together = (('doc_grp', 'doc_id', 'read_uid'),)
+
+
+class TQuarterPromotion(models.Model):
+    idx = models.CharField(primary_key=True, max_length=100)
+    quarter = models.CharField(max_length=10)
+    media_id = models.CharField(max_length=50, blank=True, null=True)
+    mkt_cd = models.CharField(max_length=50, blank=True, null=True)
+    mkt_uid = models.CharField(max_length=50, blank=True, null=True)
+    customer_id = models.CharField(max_length=100, blank=True, null=True)
+    customer_nm = models.CharField(max_length=100, blank=True, null=True)
+    username = models.CharField(max_length=50, blank=True, null=True)
+    dept_name = models.CharField(max_length=100, blank=True, null=True)
+    trns_gbn = models.CharField(max_length=1, blank=True, null=True)
+    amt = models.CharField(max_length=1000, blank=True, null=True)
+    idate = models.DateTimeField(db_column='iDate', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'T_QUARTER_PROMOTION'
+
+
+class TReference(models.Model):
+    parent_table = models.CharField(primary_key=True, max_length=50)
+    parent_column = models.CharField(max_length=50)
+    child_table = models.CharField(max_length=50)
+    child_column = models.CharField(max_length=50)
+    child_table_name = models.CharField(max_length=200)
+    precondition = models.CharField(max_length=200, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_REFERENCE'
+        unique_together = (('parent_table', 'parent_column', 'child_table', 'child_column'),)
+
+
+class TReportMedia(models.Model):
+    media_id = models.CharField(primary_key=True, max_length=20)
+    media_nm = models.CharField(max_length=50)
+    sort_code = models.SmallIntegerField()
+    login_type = models.CharField(max_length=1)
+    login_id = models.CharField(max_length=50)
+    login_pw = models.CharField(max_length=50)
+    api_key = models.CharField(max_length=200)
+    secret_key = models.CharField(max_length=200)
+    customer_id = models.CharField(max_length=20)
+    reg_dtm = models.CharField(max_length=14, blank=True, null=True)
+    upd_dtm = models.CharField(max_length=14, blank=True, null=True)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=20, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_REPORT_MEDIA'
+
+
+class TRoleId(models.Model):
+    roleid = models.CharField(primary_key=True, max_length=30)
+    rolenm = models.CharField(max_length=30)
+    menuid = models.CharField(max_length=30)
+    sort_code = models.PositiveSmallIntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_ROLE_ID'
+
+
+class TRownum(models.Model):
+    n = models.SmallIntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'T_ROWNUM'
+
+
+class TSalesDay(models.Model):
+    sale_date = models.CharField(primary_key=True, max_length=8)
+    sale_date_fr = models.CharField(max_length=8)
+    media_id = models.CharField(max_length=20)
+    customer_id = models.CharField(max_length=50)
+    customer_nm = models.CharField(max_length=50)
+    mkt_cd = models.CharField(max_length=50)
+    mkt_nm = models.CharField(max_length=50)
+    tot_amt = models.IntegerField()
+    reg_gbn = models.CharField(max_length=1, blank=True, null=True)
+    sale_note = models.CharField(max_length=100, blank=True, null=True)
+    scrap_param = models.CharField(max_length=50, blank=True, null=True)
+    reg_dtm = models.CharField(max_length=14, blank=True, null=True)
+    upd_dtm = models.CharField(max_length=14, blank=True, null=True)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=20, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_SALES_DAY'
+        unique_together = (('sale_date', 'media_id', 'customer_id'),)
+
+
+class TSalesOnbaseNew(models.Model):
+    idx = models.CharField(primary_key=True, max_length=100)
+    media_id = models.CharField(max_length=50, blank=True, null=True)
+    mkt_cd = models.CharField(max_length=50, blank=True, null=True)
+    mkt_uid = models.CharField(max_length=50, blank=True, null=True)
+    customer_id = models.CharField(max_length=100, blank=True, null=True)
+    customer_nm = models.CharField(max_length=100, blank=True, null=True)
+    username = models.CharField(max_length=50, blank=True, null=True)
+    dept_name = models.CharField(max_length=100, blank=True, null=True)
+    trns_gbn = models.CharField(max_length=1, blank=True, null=True)
+    amt = models.CharField(max_length=1000, blank=True, null=True)
+    idate = models.DateTimeField(db_column='iDate', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'T_SALES_ONBASE_NEW'
+
+
+class TSalesStaff(models.Model):
+    sale_month = models.CharField(primary_key=True, max_length=6)
+    media_id = models.CharField(max_length=20)
+    sales_uid = models.CharField(max_length=12)
+    sales_amt = models.BigIntegerField()
+    next_rate = models.IntegerField()
+    next_amt = models.BigIntegerField()
+    trns1_cnt = models.SmallIntegerField()
+    trns2_cnt = models.SmallIntegerField()
+    trns3_cnt = models.SmallIntegerField()
+    trns4_cnt = models.SmallIntegerField()
+    live1_cnt = models.SmallIntegerField()
+    live2_cnt = models.SmallIntegerField()
+    reg_gbn = models.CharField(max_length=1, blank=True, null=True)
+    sale_note = models.CharField(max_length=100, blank=True, null=True)
+    reg_dtm = models.CharField(max_length=14, blank=True, null=True)
+    upd_dtm = models.CharField(max_length=14, blank=True, null=True)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=20, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_SALES_STAFF'
+        unique_together = (('sale_month', 'media_id', 'sales_uid'),)
+
+
+class TSalesTemp(models.Model):
+    sale_date = models.CharField(primary_key=True, max_length=8)
+    media_id = models.CharField(max_length=20)
+    customer_id = models.CharField(max_length=50)
+    line_no = models.IntegerField()
+    customer_nm = models.CharField(max_length=50)
+    mkt_cd = models.CharField(max_length=50)
+    mkt_nm = models.CharField(max_length=50)
+    tot_amt = models.IntegerField()
+    sale_note = models.CharField(max_length=100, blank=True, null=True)
+    reg_dtm = models.CharField(max_length=14, blank=True, null=True)
+    upd_dtm = models.CharField(max_length=14, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_SALES_TEMP'
+        unique_together = (('sale_date', 'media_id', 'line_no'),)
+
+
+class TSchedule(models.Model):
+    schd_id = models.CharField(primary_key=True, max_length=12)
+    schd_gbn = models.CharField(max_length=1)
+    schd_code = models.CharField(max_length=3)
+    schd_uid = models.CharField(max_length=12)
+    schd_state = models.CharField(max_length=1)
+    schd_confirm = models.CharField(max_length=1)
+    schd_name = models.CharField(max_length=50, blank=True, null=True)
+    schd_date = models.CharField(max_length=8)
+    schd_time = models.CharField(max_length=4, blank=True, null=True)
+    schd_date2 = models.CharField(max_length=8)
+    schd_time2 = models.CharField(max_length=4, blank=True, null=True)
+    meet_date = models.CharField(max_length=8)
+    meet_time = models.CharField(max_length=4, blank=True, null=True)
+    meet_date2 = models.CharField(max_length=8)
+    meet_time2 = models.CharField(max_length=4, blank=True, null=True)
+    schd_rdate = models.SmallIntegerField()
+    schd_rtime = models.SmallIntegerField()
+    schd_comment = models.CharField(max_length=2000)
+    etc_comment = models.CharField(max_length=200)
+    rej_comment = models.CharField(max_length=200)
+    loc_name = models.CharField(max_length=200)
+    user_phone = models.CharField(max_length=15)
+    agent_uid = models.CharField(max_length=12)
+    cust_nm = models.CharField(max_length=50)
+    media_id = models.CharField(max_length=20)
+    schd_trns_gbn = models.CharField(max_length=1)
+    schd_st_yn = models.CharField(max_length=1)
+    schd_ed_yn = models.CharField(max_length=1)
+    mng_act_uid = models.CharField(max_length=12, blank=True, null=True)
+    mng_act_dtm = models.CharField(max_length=14, blank=True, null=True)
+    adm_act_uid = models.CharField(max_length=12, blank=True, null=True)
+    adm_act_dtm = models.CharField(max_length=14, blank=True, null=True)
+    adm_rej_uid = models.CharField(max_length=12, blank=True, null=True)
+    adm_rej_dtm = models.CharField(max_length=14, blank=True, null=True)
+    reg_dtm = models.CharField(max_length=14, blank=True, null=True)
+    upd_dtm = models.CharField(max_length=14, blank=True, null=True)
+    del_dtm = models.CharField(max_length=14, blank=True, null=True)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    del_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=50, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    del_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+    del_ip = models.CharField(max_length=15, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_SCHEDULE'
+
+
+class TScrapLog(models.Model):
+    scrap_id = models.CharField(primary_key=True, max_length=12)
+    reg_gbn = models.CharField(max_length=1)
+    media_id = models.CharField(max_length=20)
+    scrap_date = models.CharField(max_length=8)
+    data_gbn = models.CharField(max_length=20)
+    data_type = models.CharField(max_length=10)
+    sale_date = models.CharField(max_length=8)
+    date_to = models.CharField(max_length=8)
+    scrap_stat = models.CharField(max_length=1)
+    scrap_try_cnt = models.IntegerField()
+    scrap_errcd = models.CharField(max_length=20)
+    scrap_note = models.CharField(max_length=200, blank=True, null=True)
+    result_cnt = models.SmallIntegerField()
+    reg_dtm = models.CharField(max_length=14, blank=True, null=True)
+    start_dtm = models.CharField(max_length=14)
+    end_dtm = models.CharField(max_length=14)
+
+    class Meta:
+        managed = False
+        db_table = 'T_SCRAP_LOG'
+
+
+class TSeq(models.Model):
+    grpnm = models.CharField(primary_key=True, max_length=12)
+    seq = models.IntegerField()
+    seqnm = models.CharField(max_length=30)
+    skey = models.CharField(max_length=8)
+
+    class Meta:
+        managed = False
+        db_table = 'T_SEQ'
+        unique_together = (('grpnm', 'seq'),)
+
+
+class TSsgAmt(models.Model):
+    idx = models.CharField(primary_key=True, max_length=50)
+    start_date = models.CharField(max_length=20, blank=True, null=True)
+    end_date = models.CharField(max_length=20, blank=True, null=True)
+    com_id = models.CharField(max_length=20, blank=True, null=True)
+    com_nm = models.CharField(max_length=50, blank=True, null=True)
+    ad_kind = models.CharField(max_length=20, blank=True, null=True)
+    kwd = models.CharField(max_length=50, blank=True, null=True)
+    prd_id = models.CharField(max_length=50, blank=True, null=True)
+    prd_info = models.CharField(max_length=200, blank=True, null=True)
+    expose = models.IntegerField(blank=True, null=True)
+    click_cnt = models.IntegerField(blank=True, null=True)
+    purcharse_click_cnt = models.IntegerField(blank=True, null=True)
+    ctr = models.IntegerField(blank=True, null=True)
+    avg_cpc = models.IntegerField(blank=True, null=True)
+    tot_amt_yuandmu = models.IntegerField(db_column='tot_amt_YuAndMu', blank=True, null=True)  # Field name made lowercase.
+    tot_amt = models.IntegerField(blank=True, null=True)
+    mu_amt = models.IntegerField(blank=True, null=True)
+    conversion = models.IntegerField(blank=True, null=True)
+    con_ratio = models.IntegerField(blank=True, null=True)
+    contributed_sales = models.IntegerField(blank=True, null=True)
+    mkt_nm = models.CharField(max_length=10, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_SSG_AMT'
+
+
+class TStaffMonthConf(models.Model):
+    work_month = models.CharField(primary_key=True, max_length=6)
+    work_uid = models.CharField(max_length=12)
+    target_time = models.SmallIntegerField()
+    target_call = models.IntegerField(blank=True, null=True)
+    work_note = models.CharField(max_length=100, blank=True, null=True)
+    reg_dtm = models.CharField(max_length=14, blank=True, null=True)
+    upd_dtm = models.CharField(max_length=14, blank=True, null=True)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=20, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_STAFF_MONTH_CONF'
+        unique_together = (('work_month', 'work_uid'),)
+
+
+class TStaffWork(models.Model):
+    work_date = models.CharField(primary_key=True, max_length=8)
+    work_uid = models.CharField(max_length=12)
+    work_phone = models.CharField(max_length=20)
+    work_stat = models.IntegerField()
+    target_time = models.SmallIntegerField()
+    modify_time = models.SmallIntegerField()
+    work_second = models.IntegerField()
+    send_cnt = models.SmallIntegerField()
+    send_second = models.SmallIntegerField()
+    recv_cnt = models.SmallIntegerField()
+    recv_second = models.SmallIntegerField()
+    work_note = models.CharField(max_length=200, blank=True, null=True)
+    reg_dtm = models.CharField(max_length=14, blank=True, null=True)
+    upd_dtm = models.CharField(max_length=14, blank=True, null=True)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=20, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+    target_call = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_STAFF_WORK'
+        unique_together = (('work_date', 'work_uid'),)
+
+
+class TStaffWorkNetsale(models.Model):
+    work_date = models.CharField(primary_key=True, max_length=8)
+    work_uid = models.CharField(max_length=12)
+    work_phone = models.CharField(max_length=20)
+    work_stat = models.IntegerField()
+    target_time = models.SmallIntegerField()
+    modify_time = models.SmallIntegerField()
+    work_second = models.IntegerField()
+    send_cnt = models.SmallIntegerField()
+    send_second = models.SmallIntegerField()
+    recv_cnt = models.SmallIntegerField()
+    recv_second = models.SmallIntegerField()
+    work_note = models.CharField(max_length=200, blank=True, null=True)
+    reg_dtm = models.CharField(max_length=14, blank=True, null=True)
+    upd_dtm = models.CharField(max_length=14, blank=True, null=True)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=20, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+    target_call = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_STAFF_WORK_NETSALE'
+        unique_together = (('work_date', 'work_uid'),)
+
+
+class TStaffWorkNetsaleTest(models.Model):
+    work_date = models.CharField(primary_key=True, max_length=8)
+    work_uid = models.CharField(max_length=12)
+    work_phone = models.CharField(max_length=20)
+    work_stat = models.IntegerField()
+    target_time = models.SmallIntegerField()
+    modify_time = models.SmallIntegerField()
+    work_second = models.IntegerField()
+    send_cnt = models.SmallIntegerField()
+    send_second = models.SmallIntegerField()
+    recv_cnt = models.SmallIntegerField()
+    recv_second = models.SmallIntegerField()
+    work_note = models.CharField(max_length=200, blank=True, null=True)
+    reg_dtm = models.CharField(max_length=14, blank=True, null=True)
+    upd_dtm = models.CharField(max_length=14, blank=True, null=True)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=20, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+    target_call = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_STAFF_WORK_NETSALE_TEST'
+        unique_together = (('work_date', 'work_uid'),)
+
+
+class TTeam3NewbieGmarketMapping(models.Model):
+    idx = models.AutoField(primary_key=True)
+    ad_id = models.CharField(unique=True, max_length=50, blank=True, null=True)
+    mk_nm = models.CharField(max_length=10, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_TEAM3_NEWBIE_GMARKET_MAPPING'
+
+
+class TTemp1(models.Model):
+    media_nm = models.CharField(max_length=30, blank=True, null=True)
+    name = models.CharField(max_length=30, blank=True, null=True)
+    compname = models.CharField(max_length=50, blank=True, null=True)
+    adid = models.CharField(max_length=50, blank=True, null=True)
+    email = models.CharField(max_length=50, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_TEMP1'
+
+
+class TTempCustomer(models.Model):
+    idx = models.CharField(max_length=50, blank=True, null=True)
+    mkt_cd = models.CharField(max_length=50, blank=True, null=True)
+    media_nm = models.CharField(max_length=50, blank=True, null=True)
+    media_id = models.CharField(max_length=50, blank=True, null=True)
+    customer_id = models.CharField(max_length=50, blank=True, null=True)
+    compname = models.CharField(max_length=50, blank=True, null=True)
+    compceo = models.CharField(max_length=50, blank=True, null=True)
+    tax_worker = models.CharField(max_length=50, blank=True, null=True)
+    tax_tel = models.CharField(max_length=50, blank=True, null=True)
+    tax_email = models.CharField(max_length=50, blank=True, null=True)
+    compnum = models.CharField(max_length=50, blank=True, null=True)
+    map_date = models.CharField(max_length=50, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_TEMP_CUSTOMER'
+
+
+class TTransfer(models.Model):
+    trns_id = models.CharField(primary_key=True, max_length=12)
+    media_id = models.CharField(max_length=20)
+    mkt_cd = models.CharField(max_length=50)
+    mkt_nm = models.CharField(max_length=50)
+    mkt_uid = models.CharField(max_length=12)
+    trns_gbn = models.CharField(max_length=1)
+    trns_stat = models.CharField(max_length=1)
+    report_yn = models.CharField(max_length=1)
+    customer_id = models.CharField(max_length=50)
+    customer_nm = models.CharField(max_length=50)
+    trns_date = models.CharField(max_length=8, blank=True, null=True)
+    req_dtm = models.CharField(max_length=14, blank=True, null=True)
+    app_dtm = models.CharField(max_length=14, blank=True, null=True)
+    pre_month_amt = models.IntegerField()
+    reg_gbn = models.CharField(max_length=1, blank=True, null=True)
+    pre_mkt_cd = models.CharField(max_length=50, blank=True, null=True)
+    trns_note = models.CharField(max_length=255, blank=True, null=True)
+    orig_gbn = models.CharField(max_length=1)
+    orig_date = models.CharField(max_length=8, blank=True, null=True)
+    scrap_amt_dtm = models.CharField(max_length=14, blank=True, null=True)
+    scrap_amt_stat = models.CharField(max_length=1)
+    scrap_amt_try = models.IntegerField()
+    delete_check = models.CharField(max_length=1, blank=True, null=True)
+    reg_dtm = models.CharField(max_length=14, blank=True, null=True)
+    upd_dtm = models.CharField(max_length=14, blank=True, null=True)
+    del_dtm = models.CharField(max_length=14, blank=True, null=True)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=20, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    del_uid = models.CharField(max_length=12, blank=True, null=True)
+    del_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+    del_ip = models.CharField(max_length=15, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_TRANSFER'
+
+
+class TTransferTest(models.Model):
+    trns_id = models.CharField(primary_key=True, max_length=12)
+    media_id = models.CharField(max_length=20)
+    mkt_cd = models.CharField(max_length=50)
+    mkt_nm = models.CharField(max_length=50)
+    mkt_uid = models.CharField(max_length=12)
+    trns_gbn = models.CharField(max_length=1)
+    trns_stat = models.CharField(max_length=1)
+    report_yn = models.CharField(max_length=1)
+    customer_id = models.CharField(max_length=50)
+    customer_nm = models.CharField(max_length=50)
+    trns_date = models.CharField(max_length=8, blank=True, null=True)
+    req_dtm = models.CharField(max_length=14, blank=True, null=True)
+    app_dtm = models.CharField(max_length=14, blank=True, null=True)
+    pre_month_amt = models.IntegerField()
+    reg_gbn = models.CharField(max_length=1, blank=True, null=True)
+    pre_mkt_cd = models.CharField(max_length=50, blank=True, null=True)
+    trns_note = models.CharField(max_length=255, blank=True, null=True)
+    orig_gbn = models.CharField(max_length=1)
+    orig_date = models.CharField(max_length=8, blank=True, null=True)
+    scrap_amt_dtm = models.CharField(max_length=14, blank=True, null=True)
+    scrap_amt_stat = models.CharField(max_length=1)
+    scrap_amt_try = models.IntegerField()
+    delete_check = models.CharField(max_length=1, blank=True, null=True)
+    reg_dtm = models.CharField(max_length=14, blank=True, null=True)
+    upd_dtm = models.CharField(max_length=14, blank=True, null=True)
+    del_dtm = models.CharField(max_length=14, blank=True, null=True)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=20, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    del_uid = models.CharField(max_length=12, blank=True, null=True)
+    del_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+    del_ip = models.CharField(max_length=15, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_TRANSFER_TEST'
+
+
+class TUploadFile(models.Model):
+    fid = models.CharField(primary_key=True, max_length=12)
+    doc_grp = models.CharField(max_length=30)
+    doc_id = models.CharField(max_length=30)
+    attach_seq = models.IntegerField(blank=True, null=True)
+    file_name = models.CharField(max_length=20, blank=True, null=True)
+    orig_name = models.CharField(max_length=255, blank=True, null=True)
+    file_ksize = models.IntegerField(blank=True, null=True)
+    file_type = models.CharField(max_length=1)
+    fstate = models.CharField(max_length=3, blank=True, null=True)
+    fgroupcd = models.CharField(max_length=12, blank=True, null=True)
+    fcomment = models.CharField(max_length=2000, blank=True, null=True)
+    fresult = models.CharField(max_length=2000, blank=True, null=True)
+    reg_dtm = models.CharField(max_length=14, blank=True, null=True)
+    upd_dtm = models.CharField(max_length=14, blank=True, null=True)
+    del_dtm = models.CharField(max_length=14, blank=True, null=True)
+    reg_id = models.CharField(max_length=12, blank=True, null=True)
+    upd_id = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=20, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_UPLOAD_FILE'
+
+
+class TUser(models.Model):
+    uid = models.CharField(primary_key=True, max_length=12)
+    username = models.CharField(max_length=50)
+    ustate = models.CharField(max_length=1)
+    ugbn = models.CharField(max_length=1)
+    dept_code = models.CharField(max_length=12)
+    userid = models.CharField(unique=True, max_length=50)
+    userpw = models.CharField(max_length=50, blank=True, null=True)
+    uemail = models.CharField(max_length=50, blank=True, null=True)
+    mpop_email = models.CharField(max_length=50, blank=True, null=True)
+    uphone = models.CharField(max_length=20, blank=True, null=True)
+    umobile = models.CharField(max_length=20, blank=True, null=True)
+    user_note = models.CharField(max_length=500, blank=True, null=True)
+    join_date = models.CharField(max_length=8, blank=True, null=True)
+    leav_date = models.CharField(max_length=8, blank=True, null=True)
+    vac_date = models.CharField(max_length=8, blank=True, null=True)
+    work_time_yn = models.CharField(max_length=1, blank=True, null=True)
+    dept_amt_yn = models.CharField(max_length=1, blank=True, null=True)
+    reg_dtm = models.CharField(max_length=14, blank=True, null=True)
+    upd_dtm = models.CharField(max_length=14, blank=True, null=True)
+    del_dtm = models.CharField(max_length=14, blank=True, null=True)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    del_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=50, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    del_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+    del_ip = models.CharField(max_length=15, blank=True, null=True)
+    login_dtm = models.CharField(max_length=14, blank=True, null=True)
+    login_ip = models.CharField(max_length=15, blank=True, null=True)
+    fcm_token = models.CharField(max_length=200, blank=True, null=True)
+    login_mode = models.CharField(max_length=10, blank=True, null=True)
+    device_model = models.CharField(max_length=20, blank=True, null=True)
+    version_code = models.CharField(max_length=5, blank=True, null=True)
+    and_sdk_int = models.CharField(max_length=5, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_USER'
+
+
+class TUserRole(models.Model):
+    uid = models.CharField(primary_key=True, max_length=12)
+    roleid = models.CharField(max_length=30)
+
+    class Meta:
+        managed = False
+        db_table = 'T_USER_ROLE'
+        unique_together = (('uid', 'roleid'),)
+
+
+class TWmplist(models.Model):
+    idx = models.AutoField(primary_key=True)
+    adid = models.CharField(db_column='adId', max_length=100, blank=True, null=True)  # Field name made lowercase.
+    mkname = models.CharField(db_column='mkName', max_length=10, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'T_WMPLIST'
+
+
+class TWmpDaily(models.Model):
+    idx = models.CharField(max_length=100)
+    amt_date = models.DateField(blank=True, null=True)
+    mapping_date = models.DateField(blank=True, null=True)
+    company = models.CharField(max_length=10, blank=True, null=True)
+    mk_name = models.CharField(max_length=10, blank=True, null=True)
+    partner_no = models.IntegerField(blank=True, null=True)
+    partner_name = models.CharField(max_length=100, blank=True, null=True)
+    partner_id = models.CharField(max_length=100, blank=True, null=True)
+    biz_target = models.IntegerField(blank=True, null=True)
+    biz_aiplus = models.IntegerField(blank=True, null=True)
+    biz_aiboard = models.IntegerField(blank=True, null=True)
+    biz_category = models.IntegerField(blank=True, null=True)
+    biz_plusad = models.IntegerField(db_column='biz_plusAd', blank=True, null=True)  # Field name made lowercase.
+    biz_total = models.IntegerField(blank=True, null=True)
+    free_target = models.IntegerField(blank=True, null=True)
+    free_aiplus = models.IntegerField(blank=True, null=True)
+    free_adboard = models.IntegerField(blank=True, null=True)
+    free_category = models.IntegerField(blank=True, null=True)
+    free_plusad = models.IntegerField(db_column='free_plusAd', blank=True, null=True)  # Field name made lowercase.
+    free_total = models.IntegerField(blank=True, null=True)
+    total = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_WMP_Daily'
+
+
+class TWmpPartners(models.Model):
+    idx = models.CharField(primary_key=True, max_length=30)
+    agency = models.CharField(max_length=20, blank=True, null=True)
+    partner_no = models.IntegerField(blank=True, null=True)
+    partner_nm = models.CharField(max_length=50, blank=True, null=True)
+    partner_id = models.CharField(max_length=50, blank=True, null=True)
+    biz_no = models.CharField(max_length=30, blank=True, null=True)
+    center_invite_date = models.CharField(max_length=50, blank=True, null=True)
+    mapping_date = models.CharField(max_length=50, blank=True, null=True)
+    mkt_nm = models.CharField(max_length=10, blank=True, null=True)
+    recent_memo = models.CharField(max_length=20, blank=True, null=True)
+    sangtae = models.CharField(max_length=10, blank=True, null=True)
+    partner_memo = models.CharField(max_length=50, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_WMP_PARTNERS'
+
+
+class TWorkTime(models.Model):
+    wtime_id = models.CharField(primary_key=True, max_length=12)
+    min_atm = models.BigIntegerField()
+    max_atm = models.BigIntegerField()
+    set_hour = models.IntegerField()
+    set_min = models.IntegerField()
+    set_time = models.IntegerField()
+    set_call = models.IntegerField(blank=True, null=True)
+    reg_dtm = models.CharField(max_length=14, blank=True, null=True)
+    upd_dtm = models.CharField(max_length=14, blank=True, null=True)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=20, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_WORK_TIME'
+        unique_together = (('wtime_id', 'min_atm', 'max_atm'),)
+
+
+class TYearVacation(models.Model):
+    vac_uid = models.CharField(primary_key=True, max_length=12)
+    work_year = models.SmallIntegerField()
+    work_fr_date = models.CharField(max_length=14)
+    work_to_date = models.CharField(max_length=14)
+    vac_day = models.SmallIntegerField()
+    reg_dtm = models.CharField(max_length=14, blank=True, null=True)
+    upd_dtm = models.CharField(max_length=14, blank=True, null=True)
+    reg_uid = models.CharField(max_length=12, blank=True, null=True)
+    reg_name = models.CharField(max_length=20, blank=True, null=True)
+    upd_uid = models.CharField(max_length=12, blank=True, null=True)
+    upd_name = models.CharField(max_length=50, blank=True, null=True)
+    reg_ip = models.CharField(max_length=15, blank=True, null=True)
+    upd_ip = models.CharField(max_length=15, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'T_YEAR_VACATION'
+        unique_together = (('vac_uid', 'work_year'),)
